@@ -1,25 +1,25 @@
 package pwa.projet.wintter.models;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.Instant;
 
-@Table(name="tweet")
-@Entity(name="Tweet")
+@Table(name="message")
+@Entity(name="message")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Tweet
+public class Message
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(
-            name="tweet_id",
-            updatable = false
-    )
-    private long tweetId;
+    @Column(name = "message_id", nullable = false)
+    private Long messageId;
 
     @Column(
             name="content",
@@ -39,12 +39,4 @@ public class Tweet
     )
     private Instant createdTime;
 
-    @ManyToOne
-    @JoinColumn(
-                name="user_id",
-                referencedColumnName = "user_id",
-                nullable = false,
-                foreignKey = @ForeignKey(name = "FK_users_id")
-    )
-    private User user;
 }

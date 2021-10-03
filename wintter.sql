@@ -150,7 +150,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `Wintter`.`user`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Wintter`.`user` ;
+DROP TABLE IF EXISTS `Wintter`.users ;
 
 CREATE TABLE IF NOT EXISTS `Wintter`.`user` (
   `userid` INT NOT NULL AUTO_INCREMENT,
