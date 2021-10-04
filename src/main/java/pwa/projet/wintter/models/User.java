@@ -107,9 +107,12 @@ public class User
             columnDefinition = "TEXT"
     )
     private String profileBanner;
-
-    @OneToMany(targetEntity = Tweet.class, mappedBy = "user")
-    private List<Tweet> tweets = new ArrayList<>();
+//
+//    @OneToMany(targetEntity = Tweet.class, mappedBy = "user")
+//    private List<Tweet> tweets = new ArrayList<>();
+//
+//    @OneToMany(targetEntity = Chat.class, mappedBy = "user")
+//    private List<Chat> chats = new ArrayList<>();
 
     public User(String firstName, String lastName, String nickName, String email, String password, LocalDate birthDate) {
         this.firstName = firstName;

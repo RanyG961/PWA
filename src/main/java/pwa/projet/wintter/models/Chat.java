@@ -21,13 +21,27 @@ public class Chat
             name = "chat_id",
             nullable = false
     )
-    private Long chat_id;
+    private Long chatId;
 
-    @Column(
-            name="message",
+//    @OneToOne(optional = false)
+//    @JoinColumn(name = "message_id", nullable = false, columnDefinition = "TEXT")
+//    private Message message;
+
+    @ManyToOne
+    @JoinColumn(
+            name = "message_id",
+            referencedColumnName = "message_id",
             nullable = false,
-            columnDefinition = "TEXT"
+            foreignKey = @ForeignKey(name = "FK_chat_message_id")
     )
-    private String message;
+    private Message message;
 
+    @ManyToOne
+    @JoinColumn(
+            name = "user_id",
+            referencedColumnName = "user_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "FK_chat_user_id")
+    )
+    private User user;
 }
