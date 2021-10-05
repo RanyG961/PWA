@@ -23,10 +23,6 @@ public class Chat
     )
     private Long chatId;
 
-//    @OneToOne(optional = false)
-//    @JoinColumn(name = "message_id", nullable = false, columnDefinition = "TEXT")
-//    private Message message;
-
     @ManyToOne
     @JoinColumn(
             name = "message_id",
@@ -44,4 +40,13 @@ public class Chat
             foreignKey = @ForeignKey(name = "FK_chat_user_id")
     )
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "user_2_id",
+                referencedColumnName = "user_id",
+                nullable = false,
+                foreignKey = @ForeignKey(name = "FK_chat_user2_id")
+    )
+    private User user2;
+
 }

@@ -20,9 +20,9 @@ public class Follow {
     @Column(name = "follow_id", nullable = false)
     private Long followId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-            name="user_id",
+            name="user_follower_id",
             referencedColumnName = "user_id",
             nullable = false,
             insertable = false,
@@ -31,14 +31,10 @@ public class Follow {
     )
     private User follower;
 
-    @ManyToOne
-    @JoinColumn(
-            name="user_id",
-            referencedColumnName = "user_id",
-            nullable = false,
-            insertable = false,
-            updatable = false,
-            foreignKey = @ForeignKey(name = "FK_following_user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_following_id",
+                foreignKey = @ForeignKey(name = "FK_following_user_id")
     )
     private User following;
+
 }

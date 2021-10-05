@@ -11,6 +11,4 @@ public class WintterApplication {
 		SpringApplication.run(WintterApplication.class, args);
 	}
 
-
-
 }

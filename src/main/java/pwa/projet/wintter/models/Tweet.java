@@ -21,31 +21,7 @@ public class Tweet
     )
     private long tweetId;
 
-//    @Column(
-//            name="content",
-//            nullable = false,
-//            columnDefinition = "TEXT"
-//    )
-//    private String content;
-//
-//    @Column(
-//            name="media",
-//            columnDefinition = "TEXT"
-//    )
-//    private String media;
-//
-//    @Column(
-//            name="created_time"
-//    )
-//    private Instant createdTime;
-
-//    @OneToOne(optional = false)
-//    @JoinColumn(name = "message_id",
-//                nullable = false,
-//                columnDefinition = "TEXT")
-//    private Message message;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
             name = "message_id",
             referencedColumnName = "message_id",
@@ -54,7 +30,7 @@ public class Tweet
     )
     private Message message;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
                 name="user_id",
                 referencedColumnName = "user_id",
