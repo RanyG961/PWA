@@ -3,6 +3,9 @@ package pwa.projet.wintter.models;
 import lombok.*;
 
 import javax.persistence.*;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +85,7 @@ public class User
             name="birth_date",
             nullable = false
     )
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
     @Column(

@@ -11,7 +11,6 @@ import pwa.projet.wintter.services.UserService;
 import java.util.List;
 
 @Controller
-@RequestMapping("/user")
 public class UserController
 {
     private final UserService userService;
@@ -21,10 +20,30 @@ public class UserController
         this.userService = userService;
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<User>> getAllUsers()
-//    {
-//        List<User> users = userService.findAllUsers();
-//        return ResponseEntity<>(users, HttpStatus.OK);
-//    }
+
+    @RequestMapping({"/Register"})
+    public String InscriptionUser(){
+
+        return "inscription";
+
+    }
+
+    @RequestMapping({"/Login"})
+    public String RegisterUser(){
+
+        return "inscription";
+
+    }
+
+    @RequestMapping({"/Creation"})
+    public String CreationUser(User utili){
+
+        userService.addUser(utili);
+        return "redirect:/Login";
+
+    }
+
+
+
+
 }
