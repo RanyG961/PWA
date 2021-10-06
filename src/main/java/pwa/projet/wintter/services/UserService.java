@@ -20,8 +20,19 @@ public class UserService {
 
     public User addUser(User user)
     {
+        String password = user.getPassword();
+//        Verification que le mot de passe contient au moins :
+//              - Une lettre minuscule
+//              - Une lettre majuscule
+//              - Un chiffre
+//              - Un symbole
+//        A uncomment quand les tests seront finis.
+//        if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#&()–{}:;',?/*~$^+=<>]).{6,20}$")
+//        {
+//
+//        }
         String salt = BCrypt.gensalt(12);
-        user.setPassword(BCrypt.hashpw(user.getPassword(), salt));
+        user.setPassword(BCrypt.hashpw(password, salt));
         return userRepo.save(user);
     }
 
@@ -39,6 +50,11 @@ public class UserService {
     {
         return userRepo.findById(id);
     }
+
+//    public Optional<User> findUserByNicknameOrEmail(String auth)
+//    {
+//
+//    }
 
     public void deleteUser(Long id)
     {

@@ -1,9 +1,13 @@
 package pwa.projet.wintter.controllers;
 
+import javax.inject.Inject;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pwa.projet.wintter.models.User;
 import pwa.projet.wintter.services.UserService;
@@ -19,31 +23,5 @@ public class UserController
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
-
-    @RequestMapping({"/Register"})
-    public String InscriptionUser(){
-
-        return "inscription";
-
-    }
-
-    @RequestMapping({"/Login"})
-    public String RegisterUser(){
-
-        return "inscription";
-
-    }
-
-    @RequestMapping({"/Creation"})
-    public String CreationUser(User utili){
-
-        userService.addUser(utili);
-        return "redirect:/Login";
-
-    }
-
-
-
 
 }
