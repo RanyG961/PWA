@@ -8,11 +8,13 @@ import pwa.projet.wintter.repositories.TweetRepository;
 import java.util.List;
 
 @Service
-public class TweetService {
+public class TweetService
+{
     private final TweetRepository tweetRepo;
 
     @Autowired
-    public TweetService(TweetRepository tweetRepo) {
+    public TweetService(TweetRepository tweetRepo)
+    {
         this.tweetRepo = tweetRepo;
     }
 

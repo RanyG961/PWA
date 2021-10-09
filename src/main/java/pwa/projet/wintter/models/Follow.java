@@ -13,8 +13,8 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Follow {
-
+public class Follow
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "follow_id", nullable = false)
@@ -22,7 +22,7 @@ public class Follow {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-            name="user_follower_id",
+            name = "user_follower_id",
             referencedColumnName = "user_id",
             nullable = false,
             insertable = false,
@@ -33,7 +33,7 @@ public class Follow {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_following_id",
-                foreignKey = @ForeignKey(name = "FK_following_user_id")
+            foreignKey = @ForeignKey(name = "FK_following_user_id")
     )
     private User following;
 

@@ -8,35 +8,37 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.Instant;
 
-@Table(name = "message")
-@Entity(name = "message")
+@Entity(name = "Token")
+@Table(name = "token")
+//@Data
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Message
+public class VerificationToken
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "message_id", nullable = false)
-    private Long messageId;
+    @Column(
+            name = "token_id",
+            updatable = false
+    )
+    private Long tokenID;
 
     @Column(
-            name = "content",
-            nullable = false,
+            name = "token",
             columnDefinition = "TEXT"
     )
-    private String content;
+    private String token;
+
+    @OneToOne(orphanRemoval = true,
+    fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_user_id")
+    private User user;
 
     @Column(
-            name = "media",
-            columnDefinition = "TEXT"
+            name = "expiry_date"
     )
-    private String media;
-
-    @Column(
-            name = "created_time"
-    )
-    private Instant createdTime;
+    private Instant expiryDate;
 
 }

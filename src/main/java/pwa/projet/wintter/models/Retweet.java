@@ -22,7 +22,7 @@ public class Retweet
 
     @ManyToOne
     @JoinColumn(
-            name="user_id",
+            name = "user_id",
             referencedColumnName = "user_id",
             nullable = false,
             foreignKey = @ForeignKey(name = "FK_rt_user_id")
@@ -31,7 +31,7 @@ public class Retweet
 
     @ManyToOne
     @JoinColumn(
-            name="tweet_id",
+            name = "tweet_id",
             referencedColumnName = "tweet_id",
             nullable = false,
             foreignKey = @ForeignKey(name = "FK_rt_tweet_id")

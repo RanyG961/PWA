@@ -1,13 +1,18 @@
 package pwa.projet.wintter.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Table(
@@ -34,27 +39,27 @@ public class User
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(
-            name="user_id",
+            name = "user_id",
             updatable = false
     )
     private Long userId;
 
     @Column(
-            name="first_name",
+            name = "first_name",
             nullable = false,
             columnDefinition = "TEXT"
     )
     private String firstName;
 
     @Column(
-            name="last_name",
+            name = "last_name",
             nullable = false,
             columnDefinition = "TEXT"
     )
     private String lastName;
 
     @Column(
-            name="nick_name",
+            name = "nick_name",
             nullable = false,
             columnDefinition = "TEXT",
             unique = true
@@ -62,7 +67,7 @@ public class User
     private String nickName;
 
     @Column(
-            name="email",
+            name = "email",
             nullable = false,
             columnDefinition = "TEXT",
             unique = true
@@ -70,48 +75,60 @@ public class User
     private String email;
 
     @Column(
-            name="password",
+            name = "password",
             nullable = false,
             columnDefinition = "TEXT"
     )
     private String password;
 
     @Column(
-            name="biography",
+            name = "biography",
             columnDefinition = "TEXT"
     )
     private String biography;
 
     @Column(
-            name="birth_date",
+            name = "birth_date",
             nullable = false
     )
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "YYYY-MM-dd")
     private LocalDate birthDate;
 
     @Column(
-            name="location",
+            name = "created_time",
+            nullable = false
+    )
+    private Instant createdTime;
+
+    @Column(
+            name = "location",
             columnDefinition = "TEXT"
     )
     private String location;
 
     @Column(
-            name="website",
+            name = "website",
             columnDefinition = "TEXT"
     )
     private String website;
 
     @Column(
-            name="profile_picture",
+            name = "profile_picture",
             columnDefinition = "TEXT"
     )
     private String profilePicture;
 
     @Column(
-            name="profile_banner",
+            name = "profile_banner",
             columnDefinition = "TEXT"
     )
     private String profileBanner;
+
+    @Column(
+            name = "profile_enable"
+    )
+    private Boolean profileEnable;
 
     @OneToMany(targetEntity = Tweet.class, mappedBy = "user")
     private List<Tweet> tweets = new ArrayList<>();
@@ -119,7 +136,14 @@ public class User
     @OneToMany(targetEntity = Chat.class, mappedBy = "user")
     private List<Chat> chats = new ArrayList<>();
 
-    public User(String firstName, String lastName, String nickName, String email, String password, LocalDate birthDate) {
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(name = "user_roles",
+//            joinColumns = @JoinColumn(name = "user_user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "roles_role_id"))
+//    private Collection<Role> roles = new ArrayList<>();
+
+    public User(String firstName, String lastName, String nickName, String email, String password, LocalDate birthDate)
+    {
         this.firstName = firstName;
         this.lastName = lastName;
         this.nickName = nickName;

@@ -7,8 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Table(name="chat")
-@Entity(name="Chat")
+@Table(name = "chat")
+@Entity(name = "Chat")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -43,9 +43,9 @@ public class Chat
 
     @ManyToOne
     @JoinColumn(name = "user_2_id",
-                referencedColumnName = "user_id",
-                nullable = false,
-                foreignKey = @ForeignKey(name = "FK_chat_user2_id")
+            referencedColumnName = "user_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "FK_chat_user2_id")
     )
     private User user2;
 
