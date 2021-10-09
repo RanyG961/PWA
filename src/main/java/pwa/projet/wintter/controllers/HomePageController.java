@@ -20,7 +20,6 @@ public class HomePageController
     public String registerUser(@ModelAttribute("user") User user)
     {
         userService.addUser(user);
-        System.out.println(user.getPassword());
         return "redirect:/";
     }
 
@@ -34,20 +33,25 @@ public class HomePageController
     public String baseRedirect(Model model)
     {
         model.addAttribute("user", new User());
+        
         return "index";
     }
-//
-//    @PostMapping("/Register")
-//    public String registerUser(User user)
-//    {
-//        userService.addUser(user);
-//        return "redirect:/";
-//    }
-//
-//    @PostMapping("/Connexion")
-//    public void connexionUser(User user)
-//    {
-//        userService.findUserById(user.getUserId());
-//    }
-//
+
+
+
+        @PostMapping("/Connexion")
+    public String connexionUser(@ModelAttribute("user") User user,Model model)
+        {
+            User compa = new User();
+            compa = userService.getUser(user.getNickName());
+            if(compa != new User()){
+                model.addAttribute("user", compa);
+                return "userPage";
+    
+            }
+
+            return "redirect:/";
+           
+        }
+
 }
