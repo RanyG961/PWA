@@ -20,13 +20,14 @@ public class HomePageController
     public String registerUser(@ModelAttribute("user") User user)
     {
         userService.addUser(user);
+        System.out.println(user.getPassword());
         return "redirect:/";
     }
 
 //
 //    public HomePageController(UserService userService) {
 //        this.userService = userService;
-//    }
+//    
 //
 //
     @RequestMapping("/" )
