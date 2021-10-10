@@ -10,6 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import pwa.projet.wintter.component.AuthFailureHandler;
+import pwa.projet.wintter.component.AuthSuccessHandler;
+import pwa.projet.wintter.component.LogoutSuccessHandler;
 
 import javax.sql.DataSource;
 
@@ -20,6 +23,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 {
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserDetailsService userDetailsService;
+    private final AuthSuccessHandler authSuccessHandler;
+    private final AuthFailureHandler authFailureHandler;
+    private final LogoutSuccessHandler logoutSuccessHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception
@@ -31,15 +37,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .permitAll()
                 .antMatchers("/home")
                 .permitAll()
+                .antMatchers("/login_error")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .formLogin()
                 .permitAll()
                 .loginPage("/MyLogin")
-                .defaultSuccessUrl("/test.html", true)
+                .successHandler(authSuccessHandler)
+                .failureHandler(authFailureHandler)
+//                .defaultSuccessUrl("/test.html", true)
                 .and()
                 .logout()
+                .logoutSuccessHandler(logoutSuccessHandler)
                 .permitAll();
 
     }

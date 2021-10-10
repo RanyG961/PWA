@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import pwa.projet.wintter.models.User;
 import pwa.projet.wintter.services.UserService;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RequestMapping("/")
 @Controller
 @AllArgsConstructor
@@ -24,12 +26,6 @@ public class HomePageController
         return "redirect:/";
     }
 
-//
-//    public HomePageController(UserService userService) {
-//        this.userService = userService;
-//    }
-//
-//
     @RequestMapping("/" )
     public String baseRedirect(Model model)
     {
@@ -44,11 +40,18 @@ public class HomePageController
 //        return "redirect:/";
 //    }
 //
-    @RequestMapping("/MyLogin")
+    @RequestMapping("/userPage")
     public String connexionUser()
     {
         System.out.println("Here ! ");
-        return "redirect:/userPage.html";
+        return "userPage";
     }
-//
+
+    @GetMapping ("/login_error")
+    public String failedLogin()
+    {
+        System.out.println("Failed login !");
+        return "login_error";
+    }
+
 }

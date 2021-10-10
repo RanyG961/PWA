@@ -1,12 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>Profil</title>
 </head>
 <body>
     <h1> Bonjour </h1>
+        <h1 sec:authentication="name"> </h1>
+<!--        <h1 th:text= "${#request.userPrincipal.implies(}"></h1>-->
+
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign out">
+    </form>
 </body>
 </html>

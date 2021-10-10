@@ -77,7 +77,7 @@ public class UserService implements UserDetailsService
         System.out.println("birthDate : " + registerRequest.getBirthDate());
     }
 
-
+    @Transactional
     public void addUser(User user)
     {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -160,6 +160,7 @@ public class UserService implements UserDetailsService
         user.getRoles().add(role);
     }
 
+    @Transactional
     public Role saveRole(Role role)
     {
         return roleRepo.save(role);
@@ -177,7 +178,7 @@ public class UserService implements UserDetailsService
 
         if (user == null)
         {
-            log.error("User not found in the database");
+            log.error("User {} not found in the database", usernameOrEmail);
         } else
         {
             log.info("User {} found in the database", usernameOrEmail);
