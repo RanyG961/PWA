@@ -2,29 +2,34 @@ package pwa.projet.wintter.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pwa.projet.wintter.models.Email;
+import pwa.projet.wintter.models.Role;
 import pwa.projet.wintter.models.User;
 import pwa.projet.wintter.models.VerificationToken;
+import pwa.projet.wintter.repositories.RoleRepository;
 import pwa.projet.wintter.repositories.UserRepository;
 import pwa.projet.wintter.repositories.VerificationTokenRepository;
 import pwa.projet.wintter.requests.RegisterRequest;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class UserService
+public class UserService implements UserDetailsService
 {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepo;
+    private final RoleRepository roleRepo;
     private final VerificationTokenRepository verificationTokenRepo;
     private final MailService mailService;
 
@@ -47,9 +52,11 @@ public class UserService
 
         user.setFirstName(registerRequest.getFirstName());
         user.setLastName(registerRequest.getLastName());
-        user.setNickName(registerRequest.getNickName());
+        user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
+        System.out.println("Get password " + registerRequest.getPassword());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+//        user.setPassword(registerRequest.getPassword());
         user.setBirthDate(registerRequest.getBirthDate());
         user.setCreatedTime(Instant.now());
         user.setProfileEnable(false);
@@ -59,6 +66,17 @@ public class UserService
         sendMail(user);
 
     }
+
+    public void showUserJson(RegisterRequest registerRequest)
+    {
+        System.out.println("firstName : " + registerRequest.getFirstName());
+        System.out.println("lastName : " + registerRequest.getLastName());
+        System.out.println("userName : " + registerRequest.getUsername());
+        System.out.println("email : " + registerRequest.getEmail());
+        System.out.println("Get password " + registerRequest.getPassword());
+        System.out.println("birthDate : " + registerRequest.getBirthDate());
+    }
+
 
     public void addUser(User user)
     {
@@ -77,8 +95,7 @@ public class UserService
         String token = generateVerifcationToken(user);
         mailService.sendMail(new Email("A",
                 user.getEmail(),
-                "Thank you for signing up to Spring Reddit, " +
-                        "please click on the below url to activate your account : " +
+                "Activate your account on Wintter Social Network " +
                         "http://localhost:8181/api/authentification/accountVerification/"
                         + token));
     }
@@ -96,6 +113,24 @@ public class UserService
         return token;
     }
 
+    public void verifyAccount(String token) throws Exception
+    {
+        Optional<VerificationToken> verificationToken = verificationTokenRepo.findByToken(token);
+
+        verificationToken.orElseThrow(() -> new Exception("Token doesn't exist"));
+        enableUserWithToken(verificationToken.get());
+    }
+
+    @Transactional
+    public void enableUserWithToken(VerificationToken verificationToken) throws Exception
+    {
+        String username = verificationToken.getUser().getUsername();
+        User user = userRepo.findUserByUsername(username).orElseThrow(() -> new Exception("User doesn't exist"));
+        user.setProfileEnable(true);
+        userRepo.save(user);
+    }
+
+
     public List<User> findAllUsers()
     {
         return userRepo.findAll();
@@ -111,10 +146,23 @@ public class UserService
         return userRepo.findById(id);
     }
 
-    public User getUser(String nickNameOrEmail)
+//    public User getUser(String nickNameOrEmail)
+//    {
+//        log.info("Fetching user {}", nickNameOrEmail);
+//        return userRepo.findUserByUsername(nickNameOrEmail);
+//    }
+
+    public void addRoleToUser(String username, String type)
     {
-        log.info("Fetching user {}", nickNameOrEmail);
-        return userRepo.findUserByNickName(nickNameOrEmail);
+        User user = userRepo.findByUsername(username);
+        Role role = roleRepo.findByType(type);
+
+        user.getRoles().add(role);
+    }
+
+    public Role saveRole(Role role)
+    {
+        return roleRepo.save(role);
     }
 
     public void deleteUser(Long id)
@@ -122,4 +170,26 @@ public class UserService
         userRepo.deleteById(id);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException
+    {
+        User user = userRepo.findUserByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
+
+        if (user == null)
+        {
+            log.error("User not found in the database");
+        } else
+        {
+            log.info("User {} found in the database", usernameOrEmail);
+        }
+
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+        assert user != null;
+        user.getRoles().forEach(role ->
+                authorities.add(new SimpleGrantedAuthority(role.getType())));
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(), user.getPassword(), authorities);
+    }
 }

@@ -6,14 +6,13 @@ import lombok.*;
 import javax.persistence.*;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Table(
         name = "user",
@@ -23,8 +22,8 @@ import java.util.List;
                         columnNames = "email"
                 ),
                 @UniqueConstraint(
-                        name = "user_nickname_unique",
-                        columnNames = "nick_name"
+                        name = "user_username_unique",
+                        columnNames = "username"
                 )
         }
 )
@@ -59,12 +58,12 @@ public class User
     private String lastName;
 
     @Column(
-            name = "nick_name",
+            name = "username",
             nullable = false,
             columnDefinition = "TEXT",
             unique = true
     )
-    private String nickName;
+    private String username;
 
     @Column(
             name = "email",
@@ -136,17 +135,17 @@ public class User
     @OneToMany(targetEntity = Chat.class, mappedBy = "user")
     private List<Chat> chats = new ArrayList<>();
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "user_roles",
-//            joinColumns = @JoinColumn(name = "user_user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "roles_role_id"))
-//    private Collection<Role> roles = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_user_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_role_id"))
+    private Collection<Role> roles;
 
-    public User(String firstName, String lastName, String nickName, String email, String password, LocalDate birthDate)
+    public User(String firstName, String lastName, String username, String email, String password, LocalDate birthDate)
     {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.nickName = nickName;
+        this.username = username;
         this.email = email;
         this.password = password;
         this.birthDate = birthDate;

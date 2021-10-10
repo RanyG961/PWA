@@ -3,7 +3,6 @@ package pwa.projet.wintter.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pwa.projet.wintter.requests.RegisterRequest;
 import pwa.projet.wintter.services.UserService;
@@ -16,11 +15,18 @@ public class UserController
     private final UserService userService;
 
     @PostMapping("/registerjson")
-    public ResponseEntity<String> registerJson(@ModelAttribute RegisterRequest registerRequest)
+    public ResponseEntity<String> registerJson(@RequestBody RegisterRequest registerRequest)
     {
-//        model.addAttribute("registerRequest", registerRequest);
         userService.addUserJson(registerRequest);
+        userService.showUserJson(registerRequest);
         return new ResponseEntity<>("User added !", HttpStatus.OK);
+    }
+
+    @GetMapping("accountVerification/{token}")
+    public ResponseEntity<String> verifyAccount(@PathVariable String token) throws Exception
+    {
+        userService.verifyAccount(token);
+        return new ResponseEntity<>("User enabled", HttpStatus.OK);
     }
 
 //    @GetMapping("/users")
@@ -46,7 +52,7 @@ public class UserController
 //    @PostMapping("/role/addroletouser")
 //    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserForm form)
 //    {
-//        userService.addRoleToUser(form.getNickName(), form.getRoleName());
+//        userService.addRoleToUser(form.getUsername(), form.getRoleName());
 //        return ResponseEntity.ok().build();
 //    }
 }

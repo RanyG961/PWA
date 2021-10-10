@@ -3,6 +3,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,10 +44,11 @@ public class HomePageController
 //        return "redirect:/";
 //    }
 //
-//    @PostMapping("/Connexion")
-//    public void connexionUser(User user)
-//    {
-//        userService.findUserById(user.getUserId());
-//    }
+    @RequestMapping("/MyLogin")
+    public String connexionUser()
+    {
+        System.out.println("Here ! ");
+        return "redirect:/userPage.html";
+    }
 //
 }
