@@ -1,0 +1,11 @@
+.home_body{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    background-color: rgb(203, 229, 253);
+    height: 100%;
+}
+
+.home_page{
+    background-color: white;
+}
