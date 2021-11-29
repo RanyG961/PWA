@@ -67,6 +67,25 @@ public class UserService implements UserDetailsService
 
     }
 
+//    @Transactional
+//    public void addUserTest(User user)
+//    {
+//        user.setFirstName(user.getFirstName());
+//        user.setLastName(user.getLastName());
+//        user.setUsername(user.getUsername());
+//        user.setEmail(user.getEmail());
+//        System.out.println("Get password " + user.getPassword());
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        user.setBirthDate(user.getBirthDate());
+//        user.setCreatedTime(Instant.now());
+//        user.setProfileEnable(false);
+//
+//        userRepo.save(user);
+//
+//        sendMail(user);
+//
+//    }
+
     public void showUserJson(RegisterRequest registerRequest)
     {
         System.out.println("firstName : " + registerRequest.getFirstName());
@@ -133,6 +152,7 @@ public class UserService implements UserDetailsService
 
     public List<User> findAllUsers()
     {
+        log.info("Fetching all users");
         return userRepo.findAll();
     }
 
@@ -146,14 +166,15 @@ public class UserService implements UserDetailsService
         return userRepo.findById(id);
     }
 
-//    public User getUser(String nickNameOrEmail)
-//    {
-//        log.info("Fetching user {}", nickNameOrEmail);
-//        return userRepo.findUserByUsername(nickNameOrEmail);
-//    }
+    public Optional<User> getUser(String nickNameOrEmail)
+    {
+        log.info("Fetching user {}", nickNameOrEmail);
+        return userRepo.findUserByUsername(nickNameOrEmail);
+    }
 
     public void addRoleToUser(String username, String type)
     {
+        log.info("Adding role {} to user {}", type, username);
         User user = userRepo.findByUsername(username);
         Role role = roleRepo.findByType(type);
 
