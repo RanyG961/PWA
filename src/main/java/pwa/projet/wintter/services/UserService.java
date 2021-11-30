@@ -3,6 +3,7 @@ package pwa.projet.wintter.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -54,9 +55,10 @@ public class UserService implements UserDetailsService
         user.setLastName(registerRequest.getLastName());
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
-        System.out.println("Get password " + registerRequest.getPassword());
+
+        log.info("Get password {}", registerRequest.getPassword());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-//        user.setPassword(registerRequest.getPassword());
+
         user.setBirthDate(registerRequest.getBirthDate());
         user.setCreatedTime(Instant.now());
         user.setProfileEnable(false);
@@ -92,7 +94,7 @@ public class UserService implements UserDetailsService
         System.out.println("lastName : " + registerRequest.getLastName());
         System.out.println("userName : " + registerRequest.getUsername());
         System.out.println("email : " + registerRequest.getEmail());
-        System.out.println("Get password " + registerRequest.getPassword());
+        System.out.println("password : " + registerRequest.getPassword());
         System.out.println("birthDate : " + registerRequest.getBirthDate());
     }
 
@@ -156,6 +158,12 @@ public class UserService implements UserDetailsService
         return userRepo.findAll();
     }
 
+    public List<Role> findAllRoles()
+    {
+        log.info("Fetching all roles");
+        return roleRepo.findAll();
+    }
+
     public User updateUser(User user)
     {
         return userRepo.save(user);
@@ -166,11 +174,18 @@ public class UserService implements UserDetailsService
         return userRepo.findById(id);
     }
 
-    public Optional<User> getUser(String nickNameOrEmail)
+    public Optional<User> getUserByUsername(String nickNameOrEmail)
     {
         log.info("Fetching user {}", nickNameOrEmail);
         return userRepo.findUserByUsername(nickNameOrEmail);
     }
+
+    public User getUser(String nickname)
+    {
+        log.info("Fetching user {}", nickname);
+        return userRepo.findByUsername(nickname);
+    }
+
 
     public void addRoleToUser(String username, String type)
     {
@@ -179,6 +194,11 @@ public class UserService implements UserDetailsService
         Role role = roleRepo.findByType(type);
 
         user.getRoles().add(role);
+    }
+
+    public Role findRoles(String type)
+    {
+        return roleRepo.findByType(type);
     }
 
     @Transactional
