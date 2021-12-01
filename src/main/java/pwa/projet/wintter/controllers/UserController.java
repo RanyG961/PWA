@@ -35,14 +35,15 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "http://localhost:8080/")
 public class UserController
 {
     private final UserService userService;
 
-    @PostMapping("/registerjson")
+    @PostMapping("/register")
     public ResponseEntity<String> registerJson(@RequestBody RegisterRequest registerRequest)
     {
         userService.addUserJson(registerRequest);
@@ -57,13 +58,13 @@ public class UserController
         return new ResponseEntity<>("User enabled", HttpStatus.OK);
     }
 
-    @GetMapping("/users")
+    @GetMapping("/getUsers")
     public ResponseEntity<List<User>>getUsers()
     {
         return ResponseEntity.ok().body(userService.findAllUsers());
     }
 
-    @GetMapping("/roles")
+    @GetMapping("/getRoles")
     public ResponseEntity<List<Role>>getRoles()
     {
         return ResponseEntity.ok().body(userService.findAllRoles());
@@ -94,11 +95,11 @@ public class UserController
     {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
 
-        if(authorizationHeader != null && authorizationHeader.startsWith("Wintter "))
+        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer "))
         {
             try
             {
-                String refreshToken = authorizationHeader.substring("Wintter ".length());
+                String refreshToken = authorizationHeader.substring("Bearer ".length());
                 Algorithm algo = Algorithm.HMAC256("secret".getBytes());
                 JWTVerifier verifier = JWT.require(algo).build();
                 DecodedJWT decodedJWT = verifier.verify(refreshToken);
@@ -141,5 +142,11 @@ public class UserController
         } else {
             throw new RuntimeException("Refresh token is missing !");
         }
+    }
+
+    @RequestMapping(value = "{_:^(?!index\\.html|api).$}")
+    public String redirectApi() {
+        log.info("URL entered directly into the Browser, so we need to redirect...");
+        return "forward:/";
     }
 }
