@@ -60,7 +60,7 @@ public class User
     @Column(
             name = "username",
             nullable = false,
-            columnDefinition = "TEXT",
+            length = 255,
             unique = true
     )
     private String username;
@@ -68,7 +68,7 @@ public class User
     @Column(
             name = "email",
             nullable = false,
-            columnDefinition = "TEXT",
+            length = 255,
             unique = true
     )
     private String email;
