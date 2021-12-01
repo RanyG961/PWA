@@ -59,7 +59,9 @@ build/
 
 ### VUE ###
 node_modules/
-/dist/
+/dist
+/public
+
 
 # local env files
 .env.local
