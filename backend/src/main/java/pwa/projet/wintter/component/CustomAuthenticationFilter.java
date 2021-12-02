@@ -52,7 +52,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         User user = (User) authResult.getPrincipal();
 
         // Encrypt secret before passing it as a parameter
-        Algorithm algo = Algorithm.HMAC256("wintter".getBytes());
+        Algorithm algo = Algorithm.HMAC256("secret".getBytes());
         String accessToken = JWT.create().
                 withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 1 * 60 * 1000)) // 1 minute

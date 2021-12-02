@@ -17,25 +17,76 @@ const instanceLogin = axios.create({
     },
 });
 
+let user = localStorage.getItem('user');
+
+if (!user) {
+    user = {
+        access_token: '',
+        refresh_token: '',
+        username: '',
+    };
+} else {
+    try {
+        user = JSON.parse(user);
+        instance.defaults.headers.common['Authorization'] = user.access_token;
+    } catch (e) {
+        user = {
+            access_token: '',
+            refresh_token: '',
+            username: '',
+        };
+    }
+}
+console.log(user);
+
 const params = new URLSearchParams();
 
 const store = createStore({
     state: {
         status: '',
-        user: {
-            access_token: '',
-            refresh_token: '',
+        user: user,
+        userInfos: {
+            userId: -1,
+            firstName: '',
+            lastName: '',
             username: '',
+            email: '',
+            // password:
+            //     '$2a$10$KFTc9EWAg33dwKseOwaYw.rFmQf8VjUBwAWZJ4WpkVsnrCbp1Lc2S',
+            biography: '',
+            birthDate: '',
+            createdTime: '',
+            location: '',
+            website: '',
+            profilePicture: '',
+            profileBanner: '',
+            profileEnable: '',
+            tweets: [],
+            chats: [],
+            roles: [],
         },
     },
+
     mutations: {
         setStatus: function (state, status) {
             state.status = status;
         },
         logUser: function (state, user) {
-            instanceLogin.defaults.headers.common['Authorization'] =
+            instance.defaults.headers.common['Authorization'] =
                 user.access_token;
+            localStorage.setItem('user', JSON.stringify(user));
             state.user = user;
+        },
+        userInfos: function (state, userInfos) {
+            state.userInfos = userInfos;
+        },
+        logout: function (state) {
+            state.user = {
+                access_token: '',
+                refresh_token: '',
+                username: '',
+            };
+            localStorage.removeItem('user');
         },
     },
     actions: {
@@ -66,6 +117,7 @@ const store = createStore({
                         commit('setStatus', '');
                         commit('logUser', response.data);
                         console.log(response.data);
+                        console.log();
                         resolve(response);
                     })
                     .catch(function (error) {
@@ -74,13 +126,16 @@ const store = createStore({
                     });
             });
         },
-        // getUserInfos: ({ commit }) => {
-        //     instanceLogin.post('/infos')
-        //         .then(function (response)
-        //     {
-        //         commit('userInfos', response.data)
-        //     }
-        // },
+        getUserInfos: ({ commit }) => {
+            // console.log('Commit : ' + commit(getUserInfos));
+            instance
+                .post('/user/infos')
+                .then(function (response) {
+                    commit('userInfos', response.data);
+                    console.log(response.data);
+                })
+                .catch(function () {});
+        },
     },
 });
 

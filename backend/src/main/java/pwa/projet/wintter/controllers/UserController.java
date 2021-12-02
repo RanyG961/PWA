@@ -64,6 +64,69 @@ public class UserController
         return ResponseEntity.ok().body(userService.findAllUsers());
     }
 
+//    @GetMapping("/infos/{username}")
+//    public ResponseEntity<User>getUserByUsernameGet(@PathVariable String username)
+//    {
+//        return ResponseEntity.ok().body(userService.findByUsername(username));
+//    }
+
+//    @PostMapping("/infos")
+//    public ResponseEntity<User>getUserByUsernamePost(@RequestHeader (name="Authorization") String token)
+//    {
+//        token = token.substring("Bearer ".length());
+//        Algorithm algo = Algorithm.HMAC256("secret".getBytes());
+//        JWTVerifier verifier = JWT.require(algo).build();
+//        DecodedJWT decodedJWT = verifier.verify(token);
+//        String username = decodedJWT.getSubject();
+//        return ResponseEntity.ok().body(userService.findByUsername(username));
+//    }
+
+    @PostMapping("/infos")
+    public ResponseEntity<User>getUserByUsernamePost( HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
+
+        System.out.println(authorizationHeader);
+
+        if (authorizationHeader != null)
+        {
+            try
+            {
+                String refreshToken = authorizationHeader;
+                Algorithm algo = Algorithm.HMAC256("secret".getBytes());
+                JWTVerifier verifier = JWT.require(algo).build();
+                DecodedJWT decodedJWT = verifier.verify(refreshToken);
+                String username = decodedJWT.getSubject();
+                User user = userService.getUser(username);
+
+//                log.info("Hello I found this user {}", user.getLastName());
+                System.out.println("Hello I found this user " + username);
+                return ResponseEntity.ok().body(user);
+            } catch (Exception e)
+            {
+                log.error("Error logging in : {}", e.getMessage());
+
+                response.setHeader("error", e.getMessage());
+                response.setStatus(FORBIDDEN.value());
+
+                Map<String, String> error = new HashMap<>();
+
+                error.put("error_message", e.getMessage());
+
+                response.setContentType(APPLICATION_JSON_VALUE);
+
+                new ObjectMapper().writeValue(response.getOutputStream(), error);
+            }
+        } else
+        {
+            throw new RuntimeException("Refresh token is missing !");
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+
+
     @GetMapping("/getRoles")
     public ResponseEntity<List<Role>>getRoles()
     {
@@ -93,6 +156,7 @@ public class UserController
     @GetMapping("/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
+        log.info("Hello there");
         String authorizationHeader = request.getHeader(AUTHORIZATION);
 
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer "))
@@ -150,5 +214,5 @@ public class UserController
         return "forward:/";
     }
 
-    
+
 }

@@ -233,4 +233,19 @@ public class UserService implements UserDetailsService
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(), user.getPassword(), authorities);
     }
+
+    public User findByUsername(String username)
+    {
+        User user = userRepo.findUserByUsernameOrEmail(username, username);
+
+        if (user == null)
+        {
+            log.error("User {} not found in the database", username);
+        } else
+        {
+            log.info("User {} found in the database", username);
+        }
+
+        return user;
+    }
 }

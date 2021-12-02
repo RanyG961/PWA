@@ -104,7 +104,8 @@
 				:class="{ 'button--disabled': !validatedFields }"
 				v-else
 			>
-				Créer un compte !
+				<span v-if="status == 'loading'">Création en cours...</span>
+				<span v-else>Créer mon compte</span>
 			</button>
 		</div>
 	</div>
@@ -157,6 +158,12 @@ export default {
 		},
 		...mapState(["status"]),
 	},
+	mounted: function () {
+		if (this.$store.state.user.username != "") {
+			this.$router.push("/Profile");
+			return;
+		}
+	},
 	methods: {
 		switchToCreateAccount: function () {
 			this.mode = "create";
@@ -178,7 +185,7 @@ export default {
 				})
 				.then(
 					function () {
-						self.login;
+						self.login();
 					},
 					function (error) {
 						console.log(error);

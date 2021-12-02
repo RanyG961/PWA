@@ -82,7 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()).and().csrf().disable();
 //        http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().antMatchers("/api/**","/api/user/login/**", "/api/token/refresh/**").permitAll();
+        http.authorizeRequests().antMatchers("/api/**","/api/user/login/**", "/api/user/token/refresh/**").permitAll();
         http.authorizeRequests().antMatchers("/", "/home", "/js/**", "/css/**", "/vue/**").permitAll();
 
 //        "/api/**", "/api/user/login/**", "/api/user/token/refresh/**", "/api/user/register/**"
