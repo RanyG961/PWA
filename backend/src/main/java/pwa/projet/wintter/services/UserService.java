@@ -186,7 +186,6 @@ public class UserService implements UserDetailsService
         return userRepo.findByUsername(nickname);
     }
 
-
     public void addRoleToUser(String username, String type)
     {
         log.info("Adding role {} to user {}", type, username);

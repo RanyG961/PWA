@@ -96,7 +96,13 @@
             <version>3.18.2</version>
             <scope>compile</scope>
         </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>com.ginsberg</groupId>
+			<artifactId>cirkle</artifactId>
+			<version>1.0.1</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>

@@ -79,7 +79,7 @@ public class UserController
     @PostMapping("role/save")
     public ResponseEntity<Role>addRole(@RequestBody Role role)
     {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/role/save").toUriString());
         return ResponseEntity.created(uri).body(userService.saveRole(role));
     }
 
@@ -149,4 +149,6 @@ public class UserController
         log.info("URL entered directly into the Browser, so we need to redirect...");
         return "forward:/";
     }
+
+    
 }

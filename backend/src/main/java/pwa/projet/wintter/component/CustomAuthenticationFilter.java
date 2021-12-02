@@ -52,7 +52,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         User user = (User) authResult.getPrincipal();
 
         // Encrypt secret before passing it as a parameter
-        Algorithm algo = Algorithm.HMAC256("secret".getBytes());
+        Algorithm algo = Algorithm.HMAC256("wintter".getBytes());
         String accessToken = JWT.create().
                 withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 1 * 60 * 1000)) // 1 minute
@@ -70,6 +70,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 //        response.setHeader("refreshToken", refreshToken);
         Map<String, String> tokens = new HashMap<>();
 
+        tokens.put("username", user.getUsername());
         tokens.put("access_token", accessToken);
         tokens.put("refresh_token", refreshToken);
 

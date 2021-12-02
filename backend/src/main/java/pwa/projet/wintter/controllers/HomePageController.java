@@ -3,10 +3,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pwa.projet.wintter.models.User;
 import pwa.projet.wintter.services.UserService;
 
@@ -15,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/")
 @Controller
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:8080/")
 public class HomePageController
 {
     private final UserService userService;
