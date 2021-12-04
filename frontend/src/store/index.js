@@ -65,11 +65,26 @@ const store = createStore({
             chats: [],
             roles: [],
         },
+        tweetContent: {
+            content: '',
+            media: '',
+        },
+        tweets: [
+            {
+                tweetId: -1,
+                content: '',
+                media: '',
+                createdTime: '',
+            },
+        ],
     },
 
     mutations: {
         setStatus: function (state, status) {
             state.status = status;
+        },
+        tweets: function (state, tweets) {
+            state.tweets = tweets;
         },
         logUser: function (state, user) {
             instance.defaults.headers.common['Authorization'] =
@@ -105,6 +120,25 @@ const store = createStore({
                     });
             });
         },
+        createTweet: ({ commit }, tweetInfos) => {
+            return new Promise((resolve, reject) => {
+                commit('setStatus', 'loading');
+                console.log(tweetInfos);
+                instance
+                    .post('/tweet/addTweet', tweetInfos)
+                    .then(function (response) {
+                        console.log(response);
+                        commit('setStatus', 'created');
+                        resolve(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        commit('setStatus', 'error_created');
+
+                        reject(error);
+                    });
+            });
+        },
         login: ({ commit }, userInfos) => {
             params.append('username', userInfos.username);
             params.append('password', userInfos.password);
@@ -133,6 +167,15 @@ const store = createStore({
                 .then(function (response) {
                     commit('userInfos', response.data);
                     console.log(response.data);
+                })
+                .catch(function () {});
+        },
+        getTweets: ({ commit }) => {
+            instance
+                .post('/tweet/allTweets')
+                .then(function (response) {
+                    console.log(response.data);
+                    commit('tweets', response.data);
                 })
                 .catch(function () {});
         },

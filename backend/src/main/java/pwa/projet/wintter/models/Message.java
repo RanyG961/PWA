@@ -1,9 +1,6 @@
 package pwa.projet.wintter.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -35,8 +32,15 @@ public class Message
     private String media;
 
     @Column(
-            name = "created_time"
+            name = "created_time",
+            nullable = false
     )
     private Instant createdTime;
 
+    public Message(String content, String media, Instant createdTime)
+    {
+        this.content = content;
+        this.media = media;
+        this.createdTime = createdTime;
+    }
 }

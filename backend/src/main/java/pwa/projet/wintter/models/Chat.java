@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 @Table(name = "chat")
 @Entity(name = "Chat")
@@ -23,14 +24,33 @@ public class Chat
     )
     private Long chatId;
 
-    @ManyToOne
-    @JoinColumn(
-            name = "message_id",
-            referencedColumnName = "message_id",
+//    @ManyToOne
+//    @JoinColumn(
+//            name = "message_id",
+//            referencedColumnName = "message_id",
+//            nullable = false,
+//            foreignKey = @ForeignKey(name = "FK_chat_message_id")
+//    )
+//    private Message message;
+
+    @Column(
+            name = "content",
             nullable = false,
-            foreignKey = @ForeignKey(name = "FK_chat_message_id")
+            columnDefinition = "TEXT"
     )
-    private Message message;
+    private String content;
+
+    @Column(
+            name = "media",
+            columnDefinition = "TEXT"
+    )
+    private String media;
+
+    @Column(
+            name = "created_time",
+            nullable = false
+    )
+    private Instant createdTime;
 
     @ManyToOne
     @JoinColumn(
