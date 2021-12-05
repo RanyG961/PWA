@@ -17,6 +17,27 @@ const instanceLogin = axios.create({
     },
 });
 
+let userInfo = {
+    userId: -1,
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    // password:
+    //     '$2a$10$KFTc9EWAg33dwKseOwaYw.rFmQf8VjUBwAWZJ4WpkVsnrCbp1Lc2S',
+    biography: '',
+    birthDate: '',
+    createdTime: '',
+    location: '',
+    website: '',
+    profilePicture: '',
+    profileBanner: '',
+    profileEnable: '',
+    tweets: [],
+    chats: [],
+    roles: [],
+};
+
 let user = localStorage.getItem('user');
 
 if (!user) {
@@ -37,34 +58,16 @@ if (!user) {
         };
     }
 }
-console.log(user);
+// console.log(user);
 
 const params = new URLSearchParams();
+const paramOtherUser = new URLSearchParams();
 
 const store = createStore({
     state: {
         status: '',
         user: user,
-        userInfos: {
-            userId: -1,
-            firstName: '',
-            lastName: '',
-            username: '',
-            email: '',
-            // password:
-            //     '$2a$10$KFTc9EWAg33dwKseOwaYw.rFmQf8VjUBwAWZJ4WpkVsnrCbp1Lc2S',
-            biography: '',
-            birthDate: '',
-            createdTime: '',
-            location: '',
-            website: '',
-            profilePicture: '',
-            profileBanner: '',
-            profileEnable: '',
-            tweets: [],
-            chats: [],
-            roles: [],
-        },
+        userInfos: userInfo,
         tweetContent: {
             content: '',
             media: '',
@@ -77,14 +80,41 @@ const store = createStore({
                 createdTime: '',
             },
         ],
+        users: [
+            {
+                userId: -1,
+                username: '',
+                profilePicture: '',
+            },
+        ],
+        anotherUser: {
+            userId: -1,
+            username: '',
+            profilePicture: '',
+            tweeets: [],
+        },
+        demandeFollow: {
+            username: '',
+        },
+        tweet: {
+            tweetId: -1,
+        },
     },
-
     mutations: {
         setStatus: function (state, status) {
             state.status = status;
         },
+        tweet: function (state, tweet) {
+            state.tweet = tweet;
+        },
         tweets: function (state, tweets) {
             state.tweets = tweets;
+        },
+        users: function (state, users) {
+            state.users.push(users);
+        },
+        anotherUser: function (state, anotherUser) {
+            state.anotherUser = anotherUser;
         },
         logUser: function (state, user) {
             instance.defaults.headers.common['Authorization'] =
@@ -94,6 +124,9 @@ const store = createStore({
         },
         userInfos: function (state, userInfos) {
             state.userInfos = userInfos;
+        },
+        demandeFollow: function (state, demandeFollow) {
+            state.demandeFollow = demandeFollow;
         },
         logout: function (state) {
             state.user = {
@@ -178,6 +211,116 @@ const store = createStore({
                     commit('tweets', response.data);
                 })
                 .catch(function () {});
+        },
+        getAllUsers: ({ commit }) => {
+            instance
+                .post('/user/findUsers')
+                .then(function (response) {
+                    // console.log(response.data);
+                    commit('users', response.data);
+                })
+                .catch(function () {});
+        },
+        getAnotherUserInfo: ({ commit }, anotherUserInfo) => {
+            paramOtherUser.append('username', anotherUserInfo.username);
+            instance
+                .post('user/findOtherUser', paramOtherUser)
+                .then(function (response) {
+                    console.log(response.data);
+                    commit('anotherUser', response.data);
+                    paramOtherUser.delete('username');
+                })
+                .catch(function () {});
+        },
+        followUser: ({ commit }, followOk) => {
+            return new Promise((resolve, reject) => {
+                commit('setStatus', 'loading');
+                instance
+                    .post('/user/followUser', followOk)
+                    .then(function (response) {
+                        commit('setStatus', 'created');
+                        resolve(response);
+                    })
+                    .catch(function (error) {
+                        commit('setStatus', 'error_created');
+                        reject(error);
+                    });
+            });
+        },
+        unfollowUser: ({ commit }, unfollowOk) => {
+            return new Promise((resolve, reject) => {
+                commit('setStatus', 'loading');
+                instance
+                    .post('/user/unfollow', unfollowOk)
+                    .then(function (response) {
+                        commit('setStatus', 'created');
+                        resolve(response);
+                    })
+                    .catch(function (error) {
+                        commit('setStatus', 'error_created');
+                        reject(error);
+                    });
+            });
+        },
+        retweetTweet: ({ commit }, retweetOk) => {
+            return new Promise((resolve, reject) => {
+                commit('setStatus', 'loading');
+                instance
+                    .post('/tweet/rt', retweetOk)
+                    .then(function (response) {
+                        commit('setStatus', 'created');
+                        resolve(response);
+                    })
+                    .catch(function (error) {
+                        commit('setStatus', 'error_created');
+                        reject(error);
+                    });
+            });
+        },
+        unRtTweet: ({ commit }, unRetweetOk) => {
+            return new Promise((resolve, reject) => {
+                commit('setStatus', 'loading');
+                instance
+                    .post('/tweet/unRt', unRetweetOk)
+                    .then(function (response) {
+                        commit('setStatus', 'created');
+                        resolve(response);
+                    })
+                    .catch(function (error) {
+                        commit('setStatus', 'error_created');
+                        reject(error);
+                    });
+            });
+        },
+        favTweet: ({ commit }, favOK) => {
+            return new Promise((resolve, reject) => {
+                commit('setStatus', 'loading');
+                instance
+                    .post('/tweet/fav', favOK)
+                    .then(function (response) {
+                        commit('setStatus', 'created');
+                        resolve(response);
+                    })
+                    .catch(function (error) {
+                        commit('setStatus', 'error_created');
+                        reject(error);
+                    });
+            });
+        },
+        unFavTweet: ({ commit }, unFavOk) => {
+            return new Promise((resolve, reject) => {
+                commit('setStatus', 'loading');
+                instance
+                    .post('/tweet/unFav', unFavOk)
+                    .then(function (response) {
+                        commit('setStatus', 'created');
+                        resolve(response);
+                    })
+                    .catch(function (error) {
+                        commit('setStatus', 'error_created');
+                        reject(error);
+                    });
+            });
         },
     },
 });

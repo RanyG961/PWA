@@ -8,12 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pwa.projet.wintter.models.Tweet;
-import pwa.projet.wintter.requests.MessageRequest;
+import pwa.projet.wintter.requests.RetweetFavoriteRequest;
 import pwa.projet.wintter.requests.TweetRequest;
 import pwa.projet.wintter.services.TweetService;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 
-import javax.persistence.Entity;
 import java.io.IOException;
 import java.util.*;
 
@@ -29,14 +27,15 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class TweetController
 {
     private final TweetService tweetService;
+//    private String retweetRepo;
 
 
     @PostMapping("/addTweet")
     public ResponseEntity<String> addTweet(@RequestHeader(AUTHORIZATION) String token, @RequestBody TweetRequest tweetRequest) throws IOException
     {
         String username = tweetService.usernameFromToken(token);
-        System.out.println(tweetRequest.getContent() + " media : " + tweetRequest.getMedia());
-        tweetService.addTweet(tweetRequest, username);
+//        System.out.println(tweetRequest.getContent() + " media : " + tweetRequest.getMedia());
+        tweetService.addTweet(tweetRequest, token);
         return new ResponseEntity<>("Test added !", HttpStatus.OK);
     }
 
@@ -46,10 +45,43 @@ public class TweetController
         String username = tweetService.usernameFromToken(token);
         List<Tweet> listTweets = tweetService.findAllTweets();
 
-        HashMap<Integer, Object> hashTweets = tweetService.hashFindAllTweet(listTweets);
-//        List<JSONObject> allT = tweetService.jsonFindAllTweet();
-//        Hashtable hashTweets = tweetService.hashFindAllTweet(listTweets);
+        HashMap<Integer, Object> hashTweets = tweetService.hashFindAllTweet(listTweets, token);
 
         return new ResponseEntity<>(hashTweets, HttpStatus.OK);
     }
+
+    @PostMapping("/rt")
+    public ResponseEntity<String> retweetTweet(@RequestHeader(AUTHORIZATION) String token, @RequestBody RetweetFavoriteRequest retweetFavRequest) throws IOException
+    {
+        tweetService.retweetTweet(token, retweetFavRequest);
+        System.out.println("Rt ok : " + tweetService.isRt(token, retweetFavRequest));
+
+        return new ResponseEntity<>("Tweet retweeted", HttpStatus.OK);
+    }
+
+    @PostMapping("/unRt")
+    public ResponseEntity<String> unRtTweet(@RequestHeader(AUTHORIZATION) String token, @RequestBody RetweetFavoriteRequest retweetRequest) throws IOException
+    {
+        tweetService.unRetweetTweet(token, retweetRequest);
+
+        return new ResponseEntity<>("Unretweeted successfully.", HttpStatus.OK);
+    }
+
+    @PostMapping("/fav")
+    public ResponseEntity<String> favoriteTweet(@RequestHeader(AUTHORIZATION) String token, @RequestBody RetweetFavoriteRequest retweetFavRequest) throws IOException
+    {
+        tweetService.favoriteTweet(token, retweetFavRequest);
+        System.out.println("Fav ok : " + tweetService.isFav(token, retweetFavRequest));
+
+        return new ResponseEntity<>("Tweet fav", HttpStatus.OK);
+    }
+
+    @PostMapping("/unFav")
+    public ResponseEntity<String> unFavoriteTweet(@RequestHeader(AUTHORIZATION) String token, @RequestBody RetweetFavoriteRequest favoriteRequest) throws IOException
+    {
+        tweetService.unFavoriteTweet(token, favoriteRequest);
+
+        return new ResponseEntity<>("Unfavorited successfully.", HttpStatus.OK);
+    }
+
 }
