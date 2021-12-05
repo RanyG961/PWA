@@ -21,19 +21,10 @@
 <script>
 import { mapState } from "vuex";
 export default {
-	name: "Profile",
-	mounted: function () {
-		// console.log(this.$store.state.user);
-		if (this.$store.state.user.username == "") {
-			this.$router.push("/");
-			return;
-		}
-
-		this.$store.dispatch("getUserInfos");
-	},
+	name: "Profil",
 	computed: {
 		...mapState({
-			user: "userInfos",
+			user: "user",
 		}),
 	},
 	methods: {
@@ -47,6 +38,3 @@ export default {
 	},
 };
 </script>
-
-<style>
-</style>
