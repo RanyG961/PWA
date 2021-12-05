@@ -1,6 +1,9 @@
 <template>
 	<div>
-		<p>{{ tweets.content }} by {{ tweets.username }}</p>
+		<p v-if="tweets.username">
+			{{ tweets.content }} by {{ tweets.username }}
+		</p>
+		<p v-else>{{ tweets.content }} by you</p>
 		<span>
 			{{ moment(tweets.createTime).fromNow() }}
 		</span>

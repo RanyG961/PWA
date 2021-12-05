@@ -7,9 +7,6 @@
 			:tweets="tweet"
 		/>
 		<follow :utilisateur="utilisateur" />
-		<div class="form-row">
-			<p @click="goToHome()">Timeline</p>
-		</div>
 	</div>
 </template>
 <script>
@@ -19,14 +16,16 @@ import Tweet from "@/components/Tweet.vue";
 import Follow from "@/components/Follow.vue";
 
 export default {
-	name: "Profile",
+	name: "Profiles",
 	components: {
 		Profil,
 		Tweet,
 		Follow,
 	},
 	mounted: function () {
-		// console.log(this.$store.state.user);
+		this.$store.dispatch("getAnotherUserInfo", {
+			username: this.$route.params.username,
+		});
 		if (this.$store.state.user.username == "") {
 			this.$router.push("/");
 			return;
@@ -36,13 +35,8 @@ export default {
 	},
 	computed: {
 		...mapState({
-			utilisateur: "userInfos",
+			utilisateur: "anotherUser",
 		}),
-	},
-	methods: {
-		goToHome: function () {
-			this.$router.push("/Home");
-		},
 	},
 };
 </script>

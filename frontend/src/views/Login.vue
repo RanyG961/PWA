@@ -200,7 +200,7 @@ export default {
 				})
 				.then(
 					function () {
-						self.$router.push("profile");
+						self.$router.push("testProfileduser");
 					},
 					function (error) {
 						console.log(error);

@@ -44,7 +44,7 @@ export default {
 			// const target_copy = JSON.parse(JSON.stringify(this.users));
 			console.log(nickname);
 			this.$router.push({
-				name: "profil",
+				name: "profiles",
 				params: { username: nickname },
 			});
 		},
