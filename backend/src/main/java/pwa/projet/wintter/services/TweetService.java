@@ -97,6 +97,8 @@ public class TweetService
         hashT.put("media", t.getMedia());
         hashT.put("createdTime", t.getCreatedTime());
         hashT.put("username", t.getUser().getUsername());
+        hashT.put("nbRt",nbRetweet(t));
+        hashT.put("nbFav", nbFav(t));
 //        hashT.put("isRetweeted", rtExist(t, t.getUser()));
 //        hashT.put("isFavorited", favExist(t, t.getUser()));
 
@@ -199,6 +201,12 @@ public class TweetService
         retweetRepo.deleteRetweetByTweetAndUser(tweet, user);
     }
 
+    @Transactional
+    public int nbRetweet(Tweet tweet)
+    {
+        return retweetRepo.countRetweetByTweet(tweet);
+    }
+
     public boolean isRt(@RequestHeader String token, RetweetFavoriteRequest rq) throws IOException
     {
         User user = getUserByToken(token);
@@ -236,6 +244,12 @@ public class TweetService
         Tweet tweet = tweetRepo.findTweetByTweetId(favoriteRequest.getTweetId()).orElseThrow();
 
         favoriteRepo.deleteByTweetAndUser(tweet, user);
+    }
+
+    @Transactional
+    public int nbFav(Tweet tweet)
+    {
+        return favoriteRepo.countFavoriteByTweet(tweet);
     }
 
     public User getUserByToken(String token) throws IOException

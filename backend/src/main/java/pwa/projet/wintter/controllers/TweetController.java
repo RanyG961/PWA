@@ -36,13 +36,12 @@ public class TweetController
         String username = tweetService.usernameFromToken(token);
 //        System.out.println(tweetRequest.getContent() + " media : " + tweetRequest.getMedia());
         tweetService.addTweet(tweetRequest, token);
-        return new ResponseEntity<>("Test added !", HttpStatus.OK);
+        return new ResponseEntity<>("Tweet added !", HttpStatus.OK);
     }
 
     @PostMapping(value = "/allTweets", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> allTweets(@RequestHeader(AUTHORIZATION) String token) throws IOException, JSONException
     {
-        String username = tweetService.usernameFromToken(token);
         List<Tweet> listTweets = tweetService.findAllTweets();
 
         HashMap<Integer, Object> hashTweets = tweetService.hashFindAllTweet(listTweets, token);
