@@ -13,7 +13,7 @@
 			<button class="button" @click="logout()">Déconnexion</button>
 		</div>
 		<div class="form-row">
-			<p @click="goToTimeline()">Timeline</p>
+			<p @click="goToHome()">Timeline</p>
 		</div>
 	</div>
 </template>
@@ -41,8 +41,8 @@ export default {
 			this.$store.commit("logout");
 			this.$router.push("/");
 		},
-		goToTimeline: function () {
-			this.$router.push("/Timeline");
+		goToHome: function () {
+			this.$router.push("/Home");
 		},
 	},
 };

@@ -3,6 +3,7 @@ import Login from '@/views/Login.vue';
 import Profile from '@/views/Profile.vue';
 import Timeline from '@/views/Timeline.vue';
 import Profil from '@/views/Profil.vue';
+import Home from '@/views/Home.vue';
 
 const routes = [
     {
@@ -26,6 +27,12 @@ const routes = [
         name: 'profil',
         path: '/profil/:username',
         component: Profil,
+        props: true,
+    },
+    {
+        name: 'home',
+        path: '/home',
+        component: Home,
         props: true,
     },
 ];
