@@ -44,6 +44,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter
                 try
                 {
                     String token = authorizationHeader.substring("Bearer ".length());
+                    System.out.println("Token : " + token);
                     Algorithm algo = Algorithm.HMAC256("secret".getBytes());
                     JWTVerifier verifier = JWT.require(algo).build();
                     DecodedJWT decodedJWT = verifier.verify(token);

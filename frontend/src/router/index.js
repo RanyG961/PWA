@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from 'vue-router';
 import Login from '@/views/Login.vue';
 import Profile from '@/views/Profile.vue';
+import Timeline from '@/views/Timeline.vue';
 
 const routes = [
     {
@@ -13,7 +14,13 @@ const routes = [
         path: '/profile',
         component: Profile,
         props: true,
-    }
+    },
+    {
+        name: 'timeline',
+        path: '/timeline',
+        component: Timeline,
+        props: true,
+    },
 ];
 
 const router = createRouter({

@@ -1,6 +1,9 @@
 package pwa.projet.wintter.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -129,7 +132,9 @@ public class User
     )
     private Boolean profileEnable;
 
-    @OneToMany(targetEntity = Tweet.class, mappedBy = "user")
+    @OneToMany(mappedBy = "user")
+//    @JsonIgnore
+    @JsonManagedReference
     private List<Tweet> tweets = new ArrayList<>();
 
     @OneToMany(targetEntity = Chat.class, mappedBy = "user")

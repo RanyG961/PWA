@@ -1,5 +1,8 @@
 package pwa.projet.wintter.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,14 +24,33 @@ public class Tweet
     )
     private long tweetId;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(
-            name = "message_id",
-            referencedColumnName = "message_id",
+//    @OneToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(
+//            name = "message_id",
+//            referencedColumnName = "message_id",
+//            nullable = false,
+//            foreignKey = @ForeignKey(name = "FK_tweet_message_id")
+//    )
+//    private Message message;
+
+    @Column(
+            name = "content",
             nullable = false,
-            foreignKey = @ForeignKey(name = "FK_tweet_message_id")
+            columnDefinition = "TEXT"
     )
-    private Message message;
+    private String content;
+
+    @Column(
+            name = "media",
+            columnDefinition = "TEXT"
+    )
+    private String media;
+
+    @Column(
+            name = "created_time",
+            nullable = false
+    )
+    private Instant createdTime;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
@@ -37,5 +59,6 @@ public class Tweet
             nullable = false,
             foreignKey = @ForeignKey(name = "FK_tweet_user_id")
     )
+    @JsonBackReference
     private User user;
 }

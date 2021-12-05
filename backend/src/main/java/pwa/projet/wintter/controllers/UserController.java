@@ -8,7 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -81,28 +83,58 @@ public class UserController
 //        return ResponseEntity.ok().body(userService.findByUsername(username));
 //    }
 
-    @PostMapping("/infos")
-    public ResponseEntity<User>getUserByUsernamePost( HttpServletRequest request, HttpServletResponse response) throws IOException
+    @PostMapping(value = "/infos", produces = APPLICATION_JSON_VALUE)
+//    @RequestMapping( produces = MediaType.APPLICATION_JSON_VALUE))
+    public ResponseEntity<Object>getUserByUsernamePost( HttpServletRequest request, HttpServletResponse response) throws IOException
     {
 
         String authorizationHeader = request.getHeader(AUTHORIZATION);
+        String refreshToken = null;
 
-        System.out.println(authorizationHeader);
+        System.out.println("Post getUser " + authorizationHeader);
 
         if (authorizationHeader != null)
         {
             try
             {
-                String refreshToken = authorizationHeader;
+                if( authorizationHeader.contains("Bearer"))
+                {
+                    refreshToken = authorizationHeader.substring("Bearer ".length());
+                }
+                else
+                {
+                    refreshToken = authorizationHeader;
+                }
+
                 Algorithm algo = Algorithm.HMAC256("secret".getBytes());
                 JWTVerifier verifier = JWT.require(algo).build();
                 DecodedJWT decodedJWT = verifier.verify(refreshToken);
+                System.out.println("decoded : " + decodedJWT.getSubject());
                 String username = decodedJWT.getSubject();
                 User user = userService.getUser(username);
 
+                JSONObject userJSON = new JSONObject();
+//                HashMap<String, Object> userJSON = new HashMap<>();
+                userJSON.put("id", user.getUserId());
+                userJSON.put("lastName", user.getLastName());
+                userJSON.put("firstName", user.getFirstName());
+                userJSON.put("username", user.getUsername());
+                userJSON.put("email", user.getEmail());
+                userJSON.put("roles", user.getRoles());
+                userJSON.put("tweets", user.getTweets());
+                userJSON.put("profilePicture", user.getProfilePicture());
+                userJSON.put("profileBanner", user.getProfileBanner());
+                userJSON.put("chats", user.getChats());
+                userJSON.put("createdTime", user.getCreatedTime());
+                userJSON.put("birthDate", user.getBirthDate());
+                userJSON.put("biography", user.getBiography());
+
+//                List<JSONObject> user = new ArrayList<>(JSONObject)
+
 //                log.info("Hello I found this user {}", user.getLastName());
                 System.out.println("Hello I found this user " + username);
-                return ResponseEntity.ok().body(user);
+//                return ResponseEntity.ok().body(userJSON);
+                return new ResponseEntity<>(user, HttpStatus.OK);
             } catch (Exception e)
             {
                 log.error("Error logging in : {}", e.getMessage());
