@@ -24,9 +24,9 @@ public class Follow
     @JoinColumn(
             name = "user_follower_id",
             referencedColumnName = "user_id",
-            nullable = false,
-            insertable = false,
-            updatable = false,
+//            nullable = false,
+//            insertable = false,
+//            updatable = false,
             foreignKey = @ForeignKey(name = "FK_follower_user_id")
     )
     private User follower;
@@ -36,5 +36,4 @@ public class Follow
             foreignKey = @ForeignKey(name = "FK_following_user_id")
     )
     private User following;
-
 }

@@ -110,15 +110,13 @@ export default {
 			this.$store.commit("logout");
 			this.$router.push("/");
 		},
-		goProfil: function (username) {
+		goProfil: function (nickname) {
 			// console.log(this.users);
 			// const target_copy = JSON.parse(JSON.stringify(this.users));
-			console.log(username);
+			console.log(nickname);
 			this.$router.push({
-				path: "/ProfileSearch",
-				params: {
-					param1: username,
-				},
+				name: "profil",
+				params: { username: nickname },
 			});
 		},
 	},

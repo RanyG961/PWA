@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import pwa.projet.wintter.models.*;
 import pwa.projet.wintter.repositories.FollowRepository;
@@ -196,16 +197,30 @@ public class UserService implements UserDetailsService
     }
 
     @Transactional
-    public Follow followSomeone(@RequestHeader(AUTHORIZATION) String token, FollowRequest followRequest) throws IOException
+    public Follow followSomeone(@RequestHeader(AUTHORIZATION) String token, @RequestBody FollowRequest followingRequest) throws IOException
     {
-        String username = tweetService.usernameFromToken(token);
-        User follower = findByUsername(username);
+        String followerUsername = tweetService.usernameFromToken(token);
+        System.out.println("followerUsername : " + followerUsername + " followingUsername : " + followingRequest.getUsername());
+        User follower = findByUsername(followerUsername);
+        User following = findByUsername(followingRequest.getUsername());
+
         Follow follow = new Follow();
 
         follow.setFollower(follower);
-        follow.setFollowing(followRequest.getFollowing());
+        follow.setFollowing(following);
 
-        return followRepo.save(follow);
+        return followRepo.saveAndFlush(follow);
+    }
+
+    @Transactional
+    public void unFollowSomeone(@RequestHeader(AUTHORIZATION) String token, @RequestBody FollowRequest followingRequest) throws IOException
+    {
+        String followerUsername = tweetService.usernameFromToken(token);
+        System.out.println("followerUsername : " + followerUsername + " followingUsername : " + followingRequest.getUsername());
+        User follower = findByUsername(followerUsername);
+        User following = findByUsername(followingRequest.getUsername());
+
+        followRepo.deleteByFollowerAndFollowing(follower, following);
     }
 
     @Override
@@ -238,18 +253,50 @@ public class UserService implements UserDetailsService
         Integer hashId = 0;
 
         for (User u : allUsers){
-            HashMap<String, Object> hashUser = new HashMap<>();
-            hashUser.put("userId", u.getUserId());
-            hashUser.put("username", u.getUsername());
-            hashUser.put("profilePicture", u.getProfilePicture());
-            hashUser.put("tweets", u.getTweets());
-
-
-            hashUsers.put(hashId, hashUser);
+            hashingUsers(u);
+            hashUsers.put(hashId, hashingUsers(u));
             hashId++;
         }
 
         return hashUsers;
+    }
+
+    public HashMap<String, Object> findAnotherUser(String token, String username) throws IOException
+    {
+        User following = getUser(username);
+        User follower = getUser(tweetService.usernameFromToken(token));
+        Boolean exist = followRepo.findFollowByFollowerIsAndFollowingIs(follower, following).isPresent();
+        System.out.println("Do they follow each other : " + exist);
+        HashMap<String, Object> otherUser = hashingUser(following, follower);
+        otherUser.put("follows", exist);
+
+
+        return otherUser;
+    }
+
+    private HashMap<String, Object> hashingUsers(User u)
+    {
+        HashMap<String, Object> hashUser = new HashMap<>();
+
+
+        hashUser.put("userId", u.getUserId());
+        hashUser.put("username", u.getUsername());
+        hashUser.put("profilePicture", u.getProfilePicture());
+
+        return hashUser;
+    }
+
+    private HashMap<String, Object> hashingUser(User u, User follower)
+    {
+        HashMap<String, Object> hashUser = new HashMap<>();
+
+
+        hashUser.put("userId", u.getUserId());
+        hashUser.put("username", u.getUsername());
+        hashUser.put("profilePicture", u.getProfilePicture());
+        hashUser.put("tweets", tweetService.tweetsOfUserFromFollower(u,  follower));
+
+        return hashUser;
     }
 
     public User findByUsername(String username)
@@ -266,4 +313,5 @@ public class UserService implements UserDetailsService
 
         return user;
     }
+
 }

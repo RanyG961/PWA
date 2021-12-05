@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pwa.projet.wintter.models.User;
 
 @Getter
 @Setter
@@ -12,6 +11,5 @@ import pwa.projet.wintter.models.User;
 @NoArgsConstructor
 public class FollowRequest
 {
-    private User follower;
-    private User following;
+    String username;
 }

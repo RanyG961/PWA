@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import pwa.projet.wintter.models.Follow;
 import pwa.projet.wintter.models.Role;
 import pwa.projet.wintter.models.RoleToUserForm;
 import pwa.projet.wintter.models.User;
@@ -66,12 +67,29 @@ public class UserController
     }
 
     @PostMapping("/followUser")
-    public ResponseEntity<String> followUser(@RequestHeader(AUTHORIZATION) String token, @RequestBody FollowRequest followRequest) throws IOException
+    public ResponseEntity<String> followUser(@RequestHeader(AUTHORIZATION) String token, @RequestBody FollowRequest followingUsername) throws IOException
     {
-        userService.followSomeone(token, followRequest);
+        userService.followSomeone(token, followingUsername);
 
         return new ResponseEntity<>("User followed", HttpStatus.OK);
     }
+
+
+    @PostMapping("/unfollow")
+    public ResponseEntity<String> unFollowUser(@RequestHeader(AUTHORIZATION) String token, @RequestBody FollowRequest followingUsername) throws IOException
+    {
+        userService.unFollowSomeone(token, followingUsername);
+        return new ResponseEntity<>("Successefully unfollowed.", HttpStatus.OK);
+    }
+
+    @PostMapping("/findOtherUser")
+    public ResponseEntity<HashMap<String, Object>> findAnotherUser(@RequestHeader(AUTHORIZATION) String token, @RequestBody String username) throws IOException
+    {
+        System.out.println("Username : " + username);
+        return ResponseEntity.ok().body((userService.findAnotherUser(token, username.substring("username=".length()))));
+    }
+
+
 
     @PostMapping(value = "/infos", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Object>getUserByUsernamePost( HttpServletRequest request, HttpServletResponse response) throws IOException
