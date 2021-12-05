@@ -2,7 +2,6 @@
 	<div class="card">
 		<h1 class="card_title" v-if="mode == 'login'">Connexion</h1>
 		<h1 class="card_title" v-else>Inscription</h1>
-
 		<p class="card_subtitle" v-if="mode == 'login'">
 			Tu n'as pas encore de compte ?
 			<span class="card_action" @click="switchToCreateAccount()">

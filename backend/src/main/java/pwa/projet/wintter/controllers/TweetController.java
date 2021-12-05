@@ -8,12 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pwa.projet.wintter.models.Tweet;
-import pwa.projet.wintter.requests.MessageRequest;
+import pwa.projet.wintter.requests.RetweetRequest;
 import pwa.projet.wintter.requests.TweetRequest;
 import pwa.projet.wintter.services.TweetService;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 
-import javax.persistence.Entity;
 import java.io.IOException;
 import java.util.*;
 
@@ -51,5 +49,13 @@ public class TweetController
 //        Hashtable hashTweets = tweetService.hashFindAllTweet(listTweets);
 
         return new ResponseEntity<>(hashTweets, HttpStatus.OK);
+    }
+
+    @PostMapping("/rt")
+    public ResponseEntity<String> retweetTweet(@RequestHeader(AUTHORIZATION) String token, @RequestBody RetweetRequest retweetRequest) throws IOException
+    {
+        tweetService.retweetTweet(token, retweetRequest);
+
+        return new ResponseEntity<>("Tweet retweeted", HttpStatus.OK);
     }
 }

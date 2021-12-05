@@ -22,7 +22,7 @@ export default {
 }
 
 body {
-	background-image: linear-gradient(62deg, #fbab7e 0%, #f7ce68 100%);
+	background-image: linear-gradient(62deg, blue 0%, #fff 100%);
 	display: flex;
 	align-items: center;
 	justify-content: center;

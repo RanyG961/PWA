@@ -8,18 +8,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pwa.projet.wintter.models.Email;
-import pwa.projet.wintter.models.Role;
-import pwa.projet.wintter.models.User;
-import pwa.projet.wintter.models.VerificationToken;
+import org.springframework.web.bind.annotation.RequestHeader;
+import pwa.projet.wintter.models.*;
+import pwa.projet.wintter.repositories.FollowRepository;
 import pwa.projet.wintter.repositories.RoleRepository;
 import pwa.projet.wintter.repositories.UserRepository;
 import pwa.projet.wintter.repositories.VerificationTokenRepository;
+import pwa.projet.wintter.requests.FollowRequest;
 import pwa.projet.wintter.requests.RegisterRequest;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +35,8 @@ public class UserService implements UserDetailsService
     private final RoleRepository roleRepo;
     private final VerificationTokenRepository verificationTokenRepo;
     private final MailService mailService;
+    private final FollowRepository followRepo;
+    private final TweetService tweetService;
 
     @Transactional
     public void addUserJson(RegisterRequest registerRequest)
@@ -67,25 +72,6 @@ public class UserService implements UserDetailsService
         sendMail(user);
 
     }
-
-//    @Transactional
-//    public void addUserTest(User user)
-//    {
-//        user.setFirstName(user.getFirstName());
-//        user.setLastName(user.getLastName());
-//        user.setUsername(user.getUsername());
-//        user.setEmail(user.getEmail());
-//        System.out.println("Get password " + user.getPassword());
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        user.setBirthDate(user.getBirthDate());
-//        user.setCreatedTime(Instant.now());
-//        user.setProfileEnable(false);
-//
-//        userRepo.save(user);
-//
-//        sendMail(user);
-//
-//    }
 
     public void showUserJson(RegisterRequest registerRequest)
     {
@@ -150,7 +136,6 @@ public class UserService implements UserDetailsService
         userRepo.save(user);
     }
 
-
     public List<User> findAllUsers()
     {
         log.info("Fetching all users");
@@ -210,6 +195,19 @@ public class UserService implements UserDetailsService
         userRepo.deleteById(id);
     }
 
+    @Transactional
+    public Follow followSomeone(@RequestHeader(AUTHORIZATION) String token, FollowRequest followRequest) throws IOException
+    {
+        String username = tweetService.usernameFromToken(token);
+        User follower = findByUsername(username);
+        Follow follow = new Follow();
+
+        follow.setFollower(follower);
+        follow.setFollowing(followRequest.getFollowing());
+
+        return followRepo.save(follow);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException
     {
@@ -231,6 +229,27 @@ public class UserService implements UserDetailsService
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(), user.getPassword(), authorities);
+    }
+
+    public HashMap<Integer, Object> allUsers()
+    {
+        List<User> allUsers = userRepo.findAll();
+        HashMap<Integer, Object> hashUsers = new HashMap<>();
+        Integer hashId = 0;
+
+        for (User u : allUsers){
+            HashMap<String, Object> hashUser = new HashMap<>();
+            hashUser.put("userId", u.getUserId());
+            hashUser.put("username", u.getUsername());
+            hashUser.put("profilePicture", u.getProfilePicture());
+            hashUser.put("tweets", u.getTweets());
+
+
+            hashUsers.put(hashId, hashUser);
+            hashId++;
+        }
+
+        return hashUsers;
     }
 
     public User findByUsername(String username)

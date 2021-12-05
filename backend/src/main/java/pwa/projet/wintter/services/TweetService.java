@@ -5,24 +5,18 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestHeader;
-import pwa.projet.wintter.models.Message;
+import pwa.projet.wintter.models.Retweet;
 import pwa.projet.wintter.models.Tweet;
 import pwa.projet.wintter.models.User;
 import pwa.projet.wintter.repositories.MessageRepository;
+import pwa.projet.wintter.repositories.RetweetRepository;
 import pwa.projet.wintter.repositories.TweetRepository;
 import pwa.projet.wintter.repositories.UserRepository;
-import pwa.projet.wintter.requests.MessageRequest;
-import pwa.projet.wintter.requests.RegisterRequest;
+import pwa.projet.wintter.requests.RetweetRequest;
 import pwa.projet.wintter.requests.TweetRequest;
 
 import javax.transaction.Transactional;
@@ -42,6 +36,7 @@ public class TweetService
 //    private final UserService userService;
     private final UserRepository userRepo;
     private final MessageRepository messageRepo;
+    private final RetweetRepository retweetRepo;
 
     @Transactional
     public Tweet addTweet(TweetRequest tweetRequest, String username)
@@ -124,5 +119,17 @@ public class TweetService
         }
         System.out.println(username);
         return username;
+    }
+
+    public Retweet retweetTweet(@RequestHeader(AUTHORIZATION) String token, RetweetRequest retweetRequest) throws IOException
+    {
+        String username = usernameFromToken(token);
+        User user = userRepo.findUserByUsername(username).orElseThrow();
+        Retweet rt = new Retweet();
+
+        rt.setTweet(retweetRequest.getTweet());
+        rt.setUser(user);
+
+        return retweetRepo.save(rt);
     }
 }

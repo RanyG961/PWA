@@ -2,6 +2,7 @@ import { createWebHistory, createRouter } from 'vue-router';
 import Login from '@/views/Login.vue';
 import Profile from '@/views/Profile.vue';
 import Timeline from '@/views/Timeline.vue';
+import ProfileSearch from '@/views/ProfileSearch.vue';
 
 const routes = [
     {
@@ -19,6 +20,12 @@ const routes = [
         name: 'timeline',
         path: '/timeline',
         component: Timeline,
+        props: true,
+    },
+    {
+        name: 'profileSearch',
+        path: '/profileSearch/:username',
+        component: ProfileSearch,
         props: true,
     },
 ];

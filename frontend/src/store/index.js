@@ -17,6 +17,27 @@ const instanceLogin = axios.create({
     },
 });
 
+let userInfo = {
+    userId: -1,
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    // password:
+    //     '$2a$10$KFTc9EWAg33dwKseOwaYw.rFmQf8VjUBwAWZJ4WpkVsnrCbp1Lc2S',
+    biography: '',
+    birthDate: '',
+    createdTime: '',
+    location: '',
+    website: '',
+    profilePicture: '',
+    profileBanner: '',
+    profileEnable: '',
+    tweets: [],
+    chats: [],
+    roles: [],
+};
+
 let user = localStorage.getItem('user');
 
 if (!user) {
@@ -45,26 +66,7 @@ const store = createStore({
     state: {
         status: '',
         user: user,
-        userInfos: {
-            userId: -1,
-            firstName: '',
-            lastName: '',
-            username: '',
-            email: '',
-            // password:
-            //     '$2a$10$KFTc9EWAg33dwKseOwaYw.rFmQf8VjUBwAWZJ4WpkVsnrCbp1Lc2S',
-            biography: '',
-            birthDate: '',
-            createdTime: '',
-            location: '',
-            website: '',
-            profilePicture: '',
-            profileBanner: '',
-            profileEnable: '',
-            tweets: [],
-            chats: [],
-            roles: [],
-        },
+        userInfos: userInfo,
         tweetContent: {
             content: '',
             media: '',
@@ -77,14 +79,24 @@ const store = createStore({
                 createdTime: '',
             },
         ],
+        users: [
+            {
+                userId: -1,
+                username: '',
+                profilePicture: '',
+            },
+        ],
     },
-
     mutations: {
         setStatus: function (state, status) {
             state.status = status;
         },
         tweets: function (state, tweets) {
             state.tweets = tweets;
+        },
+        users: function (state, users) {
+            // state.users = users;
+            state.users.push(users);
         },
         logUser: function (state, user) {
             instance.defaults.headers.common['Authorization'] =
@@ -176,6 +188,15 @@ const store = createStore({
                 .then(function (response) {
                     console.log(response.data);
                     commit('tweets', response.data);
+                })
+                .catch(function () {});
+        },
+        getAllUsers: ({ commit }) => {
+            instance
+                .post('/user/findUsers')
+                .then(function (response) {
+                    // console.log(response.data);
+                    commit('users', response.data);
                 })
                 .catch(function () {});
         },
