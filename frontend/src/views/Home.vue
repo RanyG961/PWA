@@ -3,12 +3,14 @@
 	<addTweet />
 	<Tweet v-for="tweet in tweets" :key="tweet.id" :tweets="tweet" />
 	<ListUsers :users="users" />
+	<Deconnexion />
 </template>
 
 <script>
 import Tweet from "@/components/Tweet.vue";
 import addTweet from "@/components/addTweet.vue";
 import ListUsers from "@/components/ListUsers.vue";
+import Deconnexion from "@/components/Deconnexion.vue";
 import { mapState } from "vuex";
 
 export default {
@@ -17,6 +19,7 @@ export default {
 		Tweet,
 		addTweet,
 		ListUsers,
+		Deconnexion,
 	},
 	mounted: function () {
 		this.$store.dispatch("getTweets");
