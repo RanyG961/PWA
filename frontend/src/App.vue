@@ -33,28 +33,6 @@ body {
 	min-height: 100vh;
 }
 
-header{
-	display: flex;
-	height: 7vh;
-	width: 100%;
-	background-image: linear-gradient(62deg, #b2bac9 0%, #dfe6ee 100%);
-}
-
-.bouton_toggle{
-	margin-left: 2em;
-	align-self: center;
-}
-
-.redirection{
-	margin-left: auto;
-    margin-right: auto;
-	align-self: center;
-}
-
-.lien{
-	padding: 2em;
-}
-
 img {
 	max-width: 100%;
 	border-radius: 8px;

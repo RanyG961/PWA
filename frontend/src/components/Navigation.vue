@@ -61,14 +61,14 @@ export default {
     methods: {
         toggle_open(){
             this.afficher = !this.afficher
-            document.querySelector("main").style.marginLeft = "15%";
-            document.querySelector("sidebar").style.width = "15%";
-            document.querySelector("sidebar").style.display = "block";
+            document.querySelector(".main").style.marginLeft = "15%";
+            document.querySelector(".sidebar").style.width = "15%";
+            document.querySelector(".sidebar").style.display = "block";
         },
         toggle_close(){
             this.afficher = !this.afficher
-            document.querySelector("main").style.marginLeft = "0%";
-            document.querySelector("sidebar").style.display = "none";
+            document.querySelector(".main").style.marginLeft = "0%";
+            document.querySelector(".sidebar").style.display = "none";
         }
     }
 };
@@ -98,7 +98,7 @@ header{
 
 .sidebar {
     color: white;
-    background-color: green;
+    background-color: rgb(9, 90, 165);
     float: left;
     position: fixed;
     z-index: 1;
@@ -111,7 +111,7 @@ header{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition-duration: 1s;
+    font-family: gotFont;
 }
 
 

@@ -6,6 +6,10 @@
 
 		<div class="animation">
 			<h1 id="welcome">Bienvenue sur Wintter</h1>
+			<h2 id="infos">
+				Vous voulez en apprendre plus ?
+				<p><i class="arrow down"></i></p>
+			</h2>
 		</div>
 
 		<div class="logo">
@@ -126,11 +130,15 @@
 			</div>
 		</div>
 
-		<div class="second">
+		<div class="second_1 hide cache">
 			second
 		</div>
 
-		<div class="third">
+		<div class="second_2 hide cache">
+			second 2
+		</div>
+
+		<div class="third hide cache">
 			third
 		</div>
 
@@ -244,7 +252,6 @@ export default {
 
 <style>
 
-
 .container{
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -253,20 +260,42 @@ export default {
 		/* "header header" */
 		"animation logo"
 		"animation forms"
-		"second second"
-		"third tird" 
+		"second_1 second_2"
+		"third third" 
 		/* "footer footer" */
 }
 
 .animation{
 	grid-area: animation;
+	display: flex;
+	flex-direction: column;
 	text-align: center;
-	margin-top: 10%;
 }
 
 #welcome{
 	font-family: gotFont;
 	font-size: 5em;
+	margin-top: 20%;
+}
+
+#infos{
+	font-family: gotFont;
+	font-size: 1.5em;
+	margin-top: 70%;
+}
+
+/* W3 School */
+.down {
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+}
+
+/* W3 School */
+.arrow {
+	border: solid black;
+	border-width: 0 3px 3px 0;
+	display: inline-block;
+	padding: 3px;
 }
 
 .logo{
@@ -283,12 +312,12 @@ export default {
 	grid-area: forms;
 	max-width: 100%;
 	width: 80%;
-	height: 30%;
+	height: 60%;
 	max-height: 100%;
 	background: white;
 	border-radius: 1.5em;
 	padding: 2em;
-
+	
 }
 
 .card_title {
@@ -334,12 +363,32 @@ export default {
 	color: #aaaaaa;
 }
 
-.second{
-	grid-area: second;
+.second_1{
+	grid-area: second_1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: gotFont;
+	font-size: 5em;
+}
+
+.second_2{
+	grid-area: second_2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: gotFont;
+	font-size: 5em;
 }
 
 .third{
 	grid-area: third;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: gotFont;
+	font-size: 5em;
 }
+
 
 </style>
