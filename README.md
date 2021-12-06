@@ -25,3 +25,9 @@ Nous avons une BDD qui interagit avec le serveur Spring grâce au JPA Repository
 Le projet backend est découpé en plusieurs package ce qui améliore grandemnt la lisibilité.
 Le projet frontend est découpé quant à lui en Views - Components avec une utilisation de VueRouter et VueX.
 Notre projet est un projet MVC, Modèle - Vue - Controlleur ce qui permet une meilleure maintenance du code.
+
+---
+
+### Sources et fragueme utilisés
+
+[Soruces](Sources.html)
