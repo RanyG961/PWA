@@ -1,14 +1,15 @@
 <template>
-	<Navigation />
-	<div class="timeline">
-		<h1>Timeline</h1>
-		<addTweet />
-		<Tweet v-for="tweet in tweets" :key="tweet.id" :tweets="tweet" />
-		<ListUsers :users="users" />
-		<Deconnexion />
-		<AppFooter />
+	<div>
+		<Navigation />
+		<div class="timeline">
+			<h1>Timeline</h1>
+			<addTweet />
+			<Tweet v-for="tweet in tweets" :key="tweet.id" :tweets="tweet" />
+			<ListUsers :users="users" />
+			<Deconnexion />
+			<AppFooter />
+		</div>
 	</div>
-	
 </template>
 
 <script>
@@ -44,17 +45,15 @@ export default {
 </script>
 
 <style>
-
-.timeline{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.timeline {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 	font-size: 1.5em;
 }
 
-.timeline *{
+.timeline * {
 	margin-top: 0.5em;
 }
-
 </style>

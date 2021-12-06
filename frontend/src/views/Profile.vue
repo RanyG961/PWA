@@ -1,26 +1,28 @@
 <template>
-	<Navigation />
-	<div class="card">
-		<Profil :utilisateur="utilisateur"></Profil>
-		<follow :utilisateur="utilisateur" />
-		<Tweet
-			v-for="tweet in utilisateur.tweets"
-			:key="tweet.id"
-			:tweets="tweet"
-		/>
-		<div class="form-row">
-			<button classe="timeline_link" @click="goToHome()">Timeline</button>
+	<div>
+		<Navigation />
+		<div class="card">
+			<Profil :utilisateur="utilisateur"></Profil>
+			<Tweet
+				v-for="tweet in utilisateur.tweets"
+				:key="tweet.id"
+				:tweets="tweet"
+			/>
+			<!-- <div class="form-row">
+				<button classe="timeline_link" @click="goToHome()">
+					Timeline
+				</button>
+			</div> -->
+			<Deconnexion />
 		</div>
-		<Deconnexion />
+		<AppFooter />
 	</div>
-	<AppFooter />
 </template>
 <script>
-import Navigation from '../components/Navigation.vue'
+import Navigation from "../components/Navigation.vue";
 import { mapState } from "vuex";
 import Profil from "@/components/Profil.vue";
 import Tweet from "@/components/Tweet.vue";
-import Follow from "@/components/Follow.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import Deconnexion from "@/components/Deconnexion.vue";
 
@@ -30,7 +32,6 @@ export default {
 		Navigation,
 		Profil,
 		Tweet,
-		Follow,
 		AppFooter,
 		Deconnexion,
 	},
@@ -52,13 +53,12 @@ export default {
 		goToHome: function () {
 			this.$router.push("/Home");
 		},
-	}
+	},
 };
 </script>
 
 <style>
-
-.timeline_link{
+.timeline_link {
 	text-align: center;
 	width: 10em;
 	height: 40px;
@@ -69,5 +69,4 @@ export default {
 	background-color: #2196f3;
 	font-size: 16px;
 }
-
 </style>
