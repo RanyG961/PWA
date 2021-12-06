@@ -3,6 +3,7 @@
 		<Navigation />
 		<div class="card">
 			<Profil :utilisateur="utilisateur"></Profil>
+			<AddTweet />
 			<Tweet
 				v-for="tweet in utilisateur.tweets"
 				:key="tweet.id"
@@ -25,6 +26,7 @@ import Profil from "@/components/Profil.vue";
 import Tweet from "@/components/Tweet.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import Deconnexion from "@/components/Deconnexion.vue";
+import AddTweet from "../components/addTweet.vue";
 
 export default {
 	name: "Profile",
@@ -34,6 +36,7 @@ export default {
 		Tweet,
 		AppFooter,
 		Deconnexion,
+		AddTweet,
 	},
 	mounted: function () {
 		// console.log(this.$store.state.user);

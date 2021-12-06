@@ -1,50 +1,19 @@
 <template>
 	<div>
-		<p v-if="tweets.username">
+		<p v-if="tweets.username != me.username">
 			{{ tweets.content }} by {{ tweets.username }}
 		</p>
 		<p v-else>{{ tweets.content }} by you</p>
 		<span>
 			<!-- {{ moment(tweets.createTime).fromNow() }} -->
 		</span>
-		<div v-if="!tweets.username">
-			<div>
-				<p
-					v-if="tweets.isRetweeted"
-					@click="unRtTweet(tweets.tweetId)"
-					class="tweet_actions"
-				>
-					Vous avez retweeté le tweet {{ tweets.tweetId }}
-				</p>
-				<button
-					v-else
-					@click="retweetTweet(tweets.tweetId)"
-					class="tweet_actions"
-				>
-					Vous n'avez pas retweeté le tweet
-				</button>
-				<span> {{ tweets.nbRt }}</span>
-			</div>
-			<div>
-				<p
-					v-if="tweets.isFavorited"
-					@click="unFavTweet(tweets.tweetId)"
-				>
-					Vous avez fav le tweet
-				</p>
-				<button v-else @click="favTweet(tweets.tweetId)">
-					Vous n'avez pas fav le tweet
-				</button>
-				<span>{{ tweets.nbFav }}</span>
-			</div>
-		</div>
-		<div v-else>
+		<div>
 			<p
 				v-if="tweets.isRetweeted"
 				@click="unRtTweet(tweets.id)"
 				class="tweet_actions"
 			>
-				Vous avez retweeté le tweet {{ tweets.id }}
+				Vous avez retweeté le tweet
 			</p>
 			<button
 				v-else
@@ -63,10 +32,8 @@
 			</button>
 			<span>{{ tweets.nbFav }}</span>
 		</div>
-		<div v-if="!tweets.username || tweets.username == me.username">
-			<button @click="deleteTweet(tweets.tweetId)">
-				Supprimer le tweet
-			</button>
+		<div v-if="tweets.username == me.username">
+			<button @click="deleteTweet(tweets.id)">Supprimer le tweet</button>
 		</div>
 	</div>
 	<!-- <p>{{ me }} me, tweet {{ tweets.username }}</p> -->

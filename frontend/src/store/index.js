@@ -164,7 +164,7 @@ const store = createStore({
         createTweet: ({ commit }, tweetInfos) => {
             return new Promise((resolve, reject) => {
                 commit('setStatus', 'loading');
-                console.log(tweetInfos);
+                // console.log(tweetInfos);
                 instance
                     .post('/tweet/addTweet', tweetInfos)
                     .then(function (response) {
@@ -207,7 +207,7 @@ const store = createStore({
                 .post('/user/infos')
                 .then(function (response) {
                     commit('userInfos', response.data);
-                    console.log(response.data);
+                    // console.log(response.data);
                 })
                 .catch(function () {});
         },
@@ -215,7 +215,7 @@ const store = createStore({
             instance
                 .post('/tweet/allTweets')
                 .then(function (response) {
-                    console.log(response.data);
+                    // console.log(response.data);
                     commit('tweets', response.data);
                 })
                 .catch(function () {});
@@ -234,7 +234,7 @@ const store = createStore({
             instance
                 .post('user/findOtherUser', paramOtherUser)
                 .then(function (response) {
-                    console.log(response.data);
+                    // console.log(response.data);
                     commit('anotherUser', response.data);
                     paramOtherUser.delete('username');
                 })
