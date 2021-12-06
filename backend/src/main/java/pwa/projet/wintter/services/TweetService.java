@@ -37,6 +37,7 @@ public class TweetService
     private final MessageRepository messageRepo;
     private final RetweetRepository retweetRepo;
     private final FavoriteRepository favoriteRepo;
+    private final FollowRepository followRepo;
 
     @Transactional
     public Tweet addTweet(TweetRequest tweetRequest, @RequestHeader(AUTHORIZATION) String token) throws IOException
@@ -159,9 +160,7 @@ public class TweetService
         {
             return false;
         }
-//        tweetRepo.deleteById();
     }
-
 
    public Optional<List<Tweet>> findTweetByUser(Long userId)
    {

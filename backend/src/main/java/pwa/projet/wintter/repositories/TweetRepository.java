@@ -1,6 +1,7 @@
 package pwa.projet.wintter.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pwa.projet.wintter.models.Tweet;
 import pwa.projet.wintter.models.User;
