@@ -26,16 +26,33 @@
 			</button>
 			<span>{{ tweets.nbFav }}</span>
 		</div>
+		<div v-if="!tweets.username || tweets.username == me.username">
+			<button @click="deleteTweet(tweets.tweetId)">
+				Supprimer le tweet
+			</button>
+		</div>
+		<!-- <p>{{ me }} me, tweet {{ tweets.username }}</p> -->
 	</div>
 </template>
 
 <script>
 import moment from "moment";
+import { mapState } from "vuex";
 
 export default {
 	name: "Tweet",
 	components: {},
 	props: ["tweets"],
+	// mounted: {
+	// 	...mapState({
+	// 		me: "userInfos",
+	// 	}),
+	// },
+	computed: {
+		...mapState({
+			me: "userInfos",
+		}),
+	},
 	methods: {
 		moment,
 		retweetTweet: function (tweetId) {
@@ -55,6 +72,12 @@ export default {
 		},
 		unFavTweet: function (tweetId) {
 			this.$store.dispatch("unFavTweet", {
+				tweetId: tweetId,
+			});
+		},
+		deleteTweet: function (tweetId) {
+			console.log("TWEET ID : " + tweetId);
+			this.$store.dispatch("deleteTweet", {
 				tweetId: tweetId,
 			});
 		},

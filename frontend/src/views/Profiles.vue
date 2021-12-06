@@ -1,12 +1,14 @@
 <template>
 	<div class="card">
-		<Profil :utilisateur="utilisateur"></Profil>
+		<Profil v-if="utilisateur" :utilisateur="utilisateur"></Profil>
 		<Tweet
 			v-for="tweet in utilisateur.tweets"
 			:key="tweet.id"
 			:tweets="tweet"
 		/>
 		<follow :utilisateur="utilisateur" />
+		<span @click="getFollowing()"> {{ nbFollowing }} Abonnements </span>
+		<span @click="getFollowers()"> {{ nbFollower }} Abonnés </span>
 	</div>
 </template>
 <script>
@@ -32,11 +34,34 @@ export default {
 		}
 
 		this.$store.dispatch("getUserInfos");
+
+		this.$store.dispatch("getNbFollowers", {
+			username: this.$route.params.username,
+		});
+		this.$store.dispatch("getNbFollowing", {
+			username: this.$route.params.username,
+		});
 	},
 	computed: {
 		...mapState({
 			utilisateur: "anotherUser",
+			nbFollower: "nbFollower",
+			nbFollowing: "nbFollowing",
 		}),
+	},
+	methods: {
+		getFollowing: function () {
+			// this.$store.dispatch("getFollowing", {
+			// 	username: this.utilisateur.username,
+			// });
+			console.log("Hey");
+		},
+		getFollowers: function () {
+			// this.$store.dispatch("getFollowers", {
+			// 	username: this.utilisateur.username,
+			// });
+			console.log("Hello");
+		},
 	},
 };
 </script>

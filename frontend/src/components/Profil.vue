@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<h1 class="card_title">Profil</h1>
-		<p class="card_subtitle">Hello {{ utilisateur.username }} !</p>
+		<p class="card_subtitle">{{ utilisateur.username }}</p>
 	</div>
 </template>
 

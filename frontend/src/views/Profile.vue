@@ -6,24 +6,24 @@
 			:key="tweet.id"
 			:tweets="tweet"
 		/>
-		<follow :utilisateur="utilisateur" />
 		<div class="form-row">
 			<p @click="goToHome()">Timeline</p>
 		</div>
+		<Deconnexion />
 	</div>
 </template>
 <script>
 import { mapState } from "vuex";
 import Profil from "@/components/Profil.vue";
 import Tweet from "@/components/Tweet.vue";
-import Follow from "@/components/Follow.vue";
+import Deconnexion from "@/components/Deconnexion.vue";
 
 export default {
 	name: "Profile",
 	components: {
 		Profil,
 		Tweet,
-		Follow,
+		Deconnexion,
 	},
 	mounted: function () {
 		// console.log(this.$store.state.user);
