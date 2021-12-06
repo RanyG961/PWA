@@ -1,11 +1,8 @@
 <template>
 	<div class="container">
-		<!-- <header>
-
-		</header> -->
 
 		<div class="animation">
-			<h1 id="welcome">Bienvenue sur Wintter</h1>
+			<h1 id="welcome">Welcome to Wintter</h1>
 		</div>
 
 		<div class="logo">
@@ -125,18 +122,6 @@
 				</button>
 			</div>
 		</div>
-
-		<div class="second">
-			second
-		</div>
-
-		<div class="third">
-			third
-		</div>
-
-		<!-- <footer>
-
-		</footer> -->
 	</div>
 	
 </template>
@@ -244,29 +229,28 @@ export default {
 
 <style>
 
-
 .container{
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 50vh 50vh 100vh 100vh;
+	grid-template-rows: 50vh 50vh;
 	grid-template-areas: 
-		/* "header header" */
 		"animation logo"
 		"animation forms"
-		"second second"
-		"third tird" 
-		/* "footer footer" */
 }
 
 .animation{
 	grid-area: animation;
+	display: flex;
+	flex-direction: column;
 	text-align: center;
-	margin-top: 10%;
 }
 
 #welcome{
 	font-family: gotFont;
 	font-size: 5em;
+	line-height: 2em;
+	word-spacing: 1rem;
+	margin-top: 20%;
 }
 
 .logo{
@@ -283,12 +267,11 @@ export default {
 	grid-area: forms;
 	max-width: 100%;
 	width: 80%;
-	height: 30%;
+	height: 60%;
 	max-height: 100%;
 	background: white;
 	border-radius: 1.5em;
 	padding: 2em;
-
 }
 
 .card_title {
@@ -332,14 +315,6 @@ export default {
 
 .form-row_input::placeholder {
 	color: #aaaaaa;
-}
-
-.second{
-	grid-area: second;
-}
-
-.third{
-	grid-area: third;
 }
 
 </style>

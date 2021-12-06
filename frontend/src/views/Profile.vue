@@ -1,21 +1,40 @@
 <template>
-	<Navigation />
-	<div class="card">
-		<h1 class="card_title">Espace Perso</h1>
-		<p class="card_subtitle">Hello {{ user.username }} !</p>
-		<img :src="user.profilePicture" />
-		<div class="form-row">
-			<button class="button" @click="logout()">Déconnexion</button>
+	<div>
+		<Navigation />
+		<div class="card">
+			<Profil :utilisateur="utilisateur"></Profil>
+			<Tweet
+				v-for="tweet in utilisateur.tweets"
+				:key="tweet.id"
+				:tweets="tweet"
+			/>
+			<!-- <div class="form-row">
+				<button classe="timeline_link" @click="goToHome()">
+					Timeline
+				</button>
+			</div> -->
+			<Deconnexion />
 		</div>
+		<AppFooter />
 	</div>
 </template>
-
 <script>
-import Navigation from '../components/Navigation.vue'
+import Navigation from "../components/Navigation.vue";
 import { mapState } from "vuex";
+import Profil from "@/components/Profil.vue";
+import Tweet from "@/components/Tweet.vue";
+import AppFooter from "@/components/AppFooter.vue";
+import Deconnexion from "@/components/Deconnexion.vue";
 
 export default {
 	name: "Profile",
+	components: {
+		Navigation,
+		Profil,
+		Tweet,
+		AppFooter,
+		Deconnexion,
+	},
 	mounted: function () {
 		// console.log(this.$store.state.user);
 		if (this.$store.state.user.username == "") {
@@ -25,21 +44,32 @@ export default {
 
 		this.$store.dispatch("getUserInfos");
 	},
+	updated: function () {
+		this.$store.dispatch("getUserInfos");
+	},
 	computed: {
 		...mapState({
-			user: "userInfos",
+			utilisateur: "userInfos",
 		}),
 	},
 	methods: {
-		logout: function () {
-			this.$store.commit("logout");
-			this.$router.push("/");
+		goToHome: function () {
+			this.$router.push("/Home");
 		},
-	},components: {
-		Navigation
-	}
+	},
 };
 </script>
 
 <style>
+.timeline_link {
+	text-align: center;
+	width: 10em;
+	height: 40px;
+	padding: 12px 20px;
+	box-sizing: border-box;
+	border: 1px solid rgb(19, 24, 66);
+	border-radius: 4px;
+	background-color: #2196f3;
+	font-size: 16px;
+}
 </style>

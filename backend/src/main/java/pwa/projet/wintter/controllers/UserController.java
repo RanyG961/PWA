@@ -5,22 +5,17 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import pwa.projet.wintter.models.Follow;
 import pwa.projet.wintter.models.Role;
 import pwa.projet.wintter.models.RoleToUserForm;
 import pwa.projet.wintter.models.User;
+import pwa.projet.wintter.requests.FollowRequest;
 import pwa.projet.wintter.requests.RegisterRequest;
 import pwa.projet.wintter.services.UserService;
 
@@ -31,7 +26,6 @@ import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -60,36 +54,60 @@ public class UserController
         return new ResponseEntity<>("User enabled", HttpStatus.OK);
     }
 
-    @GetMapping("/getUsers")
+    @PostMapping("/getUsers")
     public ResponseEntity<List<User>>getUsers()
     {
         return ResponseEntity.ok().body(userService.findAllUsers());
     }
 
-//    @GetMapping("/infos/{username}")
-//    public ResponseEntity<User>getUserByUsernameGet(@PathVariable String username)
-//    {
-//        return ResponseEntity.ok().body(userService.findByUsername(username));
-//    }
+    @PostMapping("/findUsers")
+    public ResponseEntity<HashMap<Integer, Object>> findUsers(@RequestHeader(AUTHORIZATION) String token) throws IOException
+    {
+        return ResponseEntity.ok().body(userService.allUsers(token));
+    }
 
-//    @PostMapping("/infos")
-//    public ResponseEntity<User>getUserByUsernamePost(@RequestHeader (name="Authorization") String token)
-//    {
-//        token = token.substring("Bearer ".length());
-//        Algorithm algo = Algorithm.HMAC256("secret".getBytes());
-//        JWTVerifier verifier = JWT.require(algo).build();
-//        DecodedJWT decodedJWT = verifier.verify(token);
-//        String username = decodedJWT.getSubject();
-//        return ResponseEntity.ok().body(userService.findByUsername(username));
-//    }
+    @PostMapping("/followUser")
+    public ResponseEntity<String> followUser(@RequestHeader(AUTHORIZATION) String token, @RequestBody FollowRequest followingUsername) throws IOException
+    {
+        userService.followSomeone(token, followingUsername);
+
+        return new ResponseEntity<>("User followed", HttpStatus.OK);
+    }
+
+    @PostMapping("/nbFollower")
+    public ResponseEntity<Integer> countFollowers(@RequestBody FollowRequest followRequest)
+    {
+        return ResponseEntity.ok().body(userService.countFollowers(followRequest));
+    }
+
+    @PostMapping("/nbFollowing")
+    public ResponseEntity<Integer> countFollowing(@RequestBody FollowRequest followRequest)
+    {
+        return ResponseEntity.ok().body(userService.countFollowing(followRequest));
+    }
+
+    @PostMapping("/unfollow")
+    public ResponseEntity<String> unFollowUser(@RequestHeader(AUTHORIZATION) String token, @RequestBody FollowRequest followingUsername) throws IOException
+    {
+        userService.unFollowSomeone(token, followingUsername);
+        return new ResponseEntity<>("Successefully unfollowed.", HttpStatus.OK);
+    }
+
+    @PostMapping("/findOtherUser")
+    public ResponseEntity<HashMap<String, Object>> findAnotherUser(@RequestHeader(AUTHORIZATION) String token, @RequestBody String username) throws IOException
+    {
+        System.out.println("Username : " + username);
+        return ResponseEntity.ok().body((userService.findAnotherUser(token, username.substring("username=".length()))));
+    }
+
+
 
     @PostMapping(value = "/infos", produces = APPLICATION_JSON_VALUE)
-//    @RequestMapping( produces = MediaType.APPLICATION_JSON_VALUE))
     public ResponseEntity<Object>getUserByUsernamePost( HttpServletRequest request, HttpServletResponse response) throws IOException
     {
 
         String authorizationHeader = request.getHeader(AUTHORIZATION);
-        String refreshToken = null;
+        String refreshToken;
 
         System.out.println("Post getUser " + authorizationHeader);
 
@@ -113,27 +131,7 @@ public class UserController
                 String username = decodedJWT.getSubject();
                 User user = userService.getUser(username);
 
-                JSONObject userJSON = new JSONObject();
-//                HashMap<String, Object> userJSON = new HashMap<>();
-                userJSON.put("id", user.getUserId());
-                userJSON.put("lastName", user.getLastName());
-                userJSON.put("firstName", user.getFirstName());
-                userJSON.put("username", user.getUsername());
-                userJSON.put("email", user.getEmail());
-                userJSON.put("roles", user.getRoles());
-                userJSON.put("tweets", user.getTweets());
-                userJSON.put("profilePicture", user.getProfilePicture());
-                userJSON.put("profileBanner", user.getProfileBanner());
-                userJSON.put("chats", user.getChats());
-                userJSON.put("createdTime", user.getCreatedTime());
-                userJSON.put("birthDate", user.getBirthDate());
-                userJSON.put("biography", user.getBiography());
-
-//                List<JSONObject> user = new ArrayList<>(JSONObject)
-
-//                log.info("Hello I found this user {}", user.getLastName());
                 System.out.println("Hello I found this user " + username);
-//                return ResponseEntity.ok().body(userJSON);
                 return new ResponseEntity<>(user, HttpStatus.OK);
             } catch (Exception e)
             {
@@ -157,19 +155,11 @@ public class UserController
         return ResponseEntity.notFound().build();
     }
 
-
-
     @GetMapping("/getRoles")
     public ResponseEntity<List<Role>>getRoles()
     {
         return ResponseEntity.ok().body(userService.findAllRoles());
     }
-//    @PostMapping("/user/save")
-//    public ResponseEntity<User>addUser(@RequestBody User user)
-//    {
-//        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
-//        return ResponseEntity.created(uri).body(userService.addUserTest(user));
-//    }
 
     @PostMapping("role/save")
     public ResponseEntity<Role>addRole(@RequestBody Role role)
@@ -245,6 +235,4 @@ public class UserController
         log.info("URL entered directly into the Browser, so we need to redirect...");
         return "forward:/";
     }
-
-
 }

@@ -17,6 +17,10 @@ export default {
   src: url(./assets/GOT.ttf);
 }
 
+.main{
+	margin-left: 0%;
+}
+
 * {
 	font-family: cascadia-code, sans-serif;
 	margin: 0;
@@ -31,28 +35,6 @@ export default {
 body {
 	background-image: linear-gradient(62deg, #4e7bbe 0%, #a2bfe0 100%);
 	min-height: 100vh;
-}
-
-header{
-	display: flex;
-	height: 7vh;
-	width: 100%;
-	background-image: linear-gradient(62deg, #b2bac9 0%, #dfe6ee 100%);
-}
-
-.bouton_toggle{
-	margin-left: 2em;
-	align-self: center;
-}
-
-.redirection{
-	margin-left: auto;
-    margin-right: auto;
-	align-self: center;
-}
-
-.lien{
-	padding: 2em;
 }
 
 img {
