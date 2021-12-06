@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="timeline">
 		<h1>Tweet</h1>
 		<div class="">
 			<textarea
@@ -122,3 +122,14 @@ export default {
 	},
 };
 </script>
+
+<style>
+
+.timeline{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+</style>

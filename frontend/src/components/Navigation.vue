@@ -1,26 +1,26 @@
 <template>
     <div class="sidebar" v-if="afficher">
         <div class="menu">
-            <button class="" @click="toggle_close()">Close &times;</button>
+            <button id="close" @click="toggle_close()">Close &times;</button>
 		</div>
         <a>
             <router-link to="/" class="lien">
-                <span>Accueil</span>
+                <p>Accueil</p>
             </router-link>
         </a>
         <a>    
             <router-link to="/profile" class="lien">
-                <span>Profile</span>
+                <p>Profile</p>
             </router-link>
         </a>
         <a>    
             <router-link to="/conversation" class="lien">
-                <span>Conversations</span>
+                <p>Conversations</p>
             </router-link>
         </a>
         <a>    
             <router-link to="/notification" class="lien">
-                <span>Notifications</span>
+                <p>Notifications</p>
             </router-link>
         </a>
     </div>
@@ -34,10 +34,10 @@
         </div>
         <nav class="redirection">
           <router-link to="/" class="lien">
-            <span>Accueil</span>
+            <p>Accueil</p>
           </router-link>
           <router-link to="/profile" class="lien">
-            <span>Profile</span>
+            <p>Profile</p>
           </router-link>
         </nav>
     </header> 
@@ -61,8 +61,8 @@ export default {
     methods: {
         toggle_open(){
             this.afficher = !this.afficher
-            document.querySelector(".main").style.marginLeft = "15%";
-            document.querySelector(".sidebar").style.width = "15%";
+            document.querySelector(".main").style.marginLeft = "25%";
+            document.querySelector(".sidebar").style.width = "25%";
             document.querySelector(".sidebar").style.display = "block";
         },
         toggle_close(){
@@ -105,14 +105,30 @@ header{
     top: 0;
     left: 0;
     bottom: 0;
-    padding: 0.5em;
-    transition: 0.3 ease;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     font-family: gotFont;
+    font-size: 2rem;
+    width: 250px;
 }
 
+.sidebar a {
+    margin-top: 20%;
+}
+
+#open{
+    height: 5em;
+    width: 5em;
+    background-color: rgb(143, 143, 180);
+}
+
+#close{
+    height: 5em;
+    width: 5em;
+    background-color: rgb(143, 143, 180);
+}
 
 </style>
+

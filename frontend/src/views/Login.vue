@@ -7,7 +7,7 @@
 		<div class="animation">
 			<h1 id="welcome">Bienvenue sur Wintter</h1>
 			<h2 id="infos">
-				Vous voulez en apprendre plus ?
+				Vous voulez en apprendre plus 
 				<p><i class="arrow down"></i></p>
 			</h2>
 		</div>
@@ -275,13 +275,16 @@ export default {
 #welcome{
 	font-family: gotFont;
 	font-size: 5em;
+	line-height: 2em;
+	word-spacing: 1rem;
 	margin-top: 20%;
 }
 
 #infos{
 	font-family: gotFont;
 	font-size: 1.5em;
-	margin-top: 70%;
+	word-spacing: 1rem;
+	margin-top: 40%;
 }
 
 /* W3 School */
@@ -317,7 +320,6 @@ export default {
 	background: white;
 	border-radius: 1.5em;
 	padding: 2em;
-	
 }
 
 .card_title {
