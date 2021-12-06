@@ -8,31 +8,30 @@
 			:tweets="tweet"
 		/>
 		<follow :utilisateur="utilisateur" />
-		<div class="form-row">
-			<button classe="timeline_link" @click="goToHome()">Timeline</button>
-		</div>
 	</div>
 	<AppFooter />
 </template>
 <script>
-import Navigation from '../components/Navigation.vue'
 import { mapState } from "vuex";
 import Profil from "@/components/Profil.vue";
 import Tweet from "@/components/Tweet.vue";
 import Follow from "@/components/Follow.vue";
+import Navigation from "@/components/Navigation.vue";
 import AppFooter from "@/components/AppFooter.vue";
 
 export default {
-	name: "Profile",
+	name: "Profiles",
 	components: {
-		Navigation,
 		Profil,
 		Tweet,
 		Follow,
+		Navigation,
 		AppFooter,
 	},
 	mounted: function () {
-		// console.log(this.$store.state.user);
+		this.$store.dispatch("getAnotherUserInfo", {
+			username: this.$route.params.username,
+		});
 		if (this.$store.state.user.username == "") {
 			this.$router.push("/");
 			return;
@@ -42,29 +41,11 @@ export default {
 	},
 	computed: {
 		...mapState({
-			utilisateur: "userInfos",
+			utilisateur: "anotherUser",
 		}),
 	},
-	methods: {
-		goToHome: function () {
-			this.$router.push("/Home");
-		},
-	}
 };
 </script>
 
 <style>
-
-.timeline_link{
-	text-align: center;
-	width: 10em;
-	height: 40px;
-	padding: 12px 20px;
-	box-sizing: border-box;
-	border: 1px solid rgb(19, 24, 66);
-	border-radius: 4px;
-	background-color: #2196f3;
-	font-size: 16px;
-}
-
 </style>

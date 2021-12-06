@@ -12,4 +12,5 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long>
 {
     Optional<Favorite> findFavoriteByTweetAndUser(Tweet tweet, User user);
     void deleteByTweetAndUser(Tweet tweet, User user);
+    int countFavoriteByTweet(Tweet tweet);
 }

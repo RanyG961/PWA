@@ -1,15 +1,8 @@
 <template>
 	<div class="container">
-		<!-- <header>
-
-		</header> -->
 
 		<div class="animation">
-			<h1 id="welcome">Bienvenue sur Wintter</h1>
-			<h2 id="infos">
-				Vous voulez en apprendre plus 
-				<p><i class="arrow down"></i></p>
-			</h2>
+			<h1 id="welcome">Welcome to Wintter</h1>
 		</div>
 
 		<div class="logo">
@@ -129,22 +122,6 @@
 				</button>
 			</div>
 		</div>
-
-		<div class="second_1 hide cache">
-			second
-		</div>
-
-		<div class="second_2 hide cache">
-			second 2
-		</div>
-
-		<div class="third hide cache">
-			third
-		</div>
-
-		<!-- <footer>
-
-		</footer> -->
 	</div>
 	
 </template>
@@ -239,7 +216,7 @@ export default {
 				})
 				.then(
 					function () {
-						self.$router.push("profile");
+						self.$router.push("testProfileduser");
 					},
 					function (error) {
 						console.log(error);
@@ -255,14 +232,10 @@ export default {
 .container{
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 50vh 50vh 100vh 100vh;
+	grid-template-rows: 50vh 50vh;
 	grid-template-areas: 
-		/* "header header" */
 		"animation logo"
 		"animation forms"
-		"second_1 second_2"
-		"third third" 
-		/* "footer footer" */
 }
 
 .animation{
@@ -278,27 +251,6 @@ export default {
 	line-height: 2em;
 	word-spacing: 1rem;
 	margin-top: 20%;
-}
-
-#infos{
-	font-family: gotFont;
-	font-size: 1.5em;
-	word-spacing: 1rem;
-	margin-top: 40%;
-}
-
-/* W3 School */
-.down {
-	transform: rotate(45deg);
-	-webkit-transform: rotate(45deg);
-}
-
-/* W3 School */
-.arrow {
-	border: solid black;
-	border-width: 0 3px 3px 0;
-	display: inline-block;
-	padding: 3px;
 }
 
 .logo{
@@ -364,33 +316,5 @@ export default {
 .form-row_input::placeholder {
 	color: #aaaaaa;
 }
-
-.second_1{
-	grid-area: second_1;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-family: gotFont;
-	font-size: 5em;
-}
-
-.second_2{
-	grid-area: second_2;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-family: gotFont;
-	font-size: 5em;
-}
-
-.third{
-	grid-area: third;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-family: gotFont;
-	font-size: 5em;
-}
-
 
 </style>

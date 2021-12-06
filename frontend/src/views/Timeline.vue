@@ -1,4 +1,5 @@
 <template>
+    <Navigation />
 	<div class="timeline">
 		<h1>Tweet</h1>
 		<div class="">
@@ -46,14 +47,19 @@
 			<p>{{ user.username }}</p>
 		</div> -->
 	</div>
+    <AppFooter />
 </template>
 <script>
 import { mapState } from "vuex";
+import Navigation from "@/components/Navigation.vue";
+import AppFooter from "@/components/AppFooter.vue";
 // import tweet from "@/components/Tweet.vue";
 // import Tweet1 from "../components/Tweet.vue";
 export default {
 	name: "Timeline",
 	components: {
+        Navigation,
+        AppFooter,
 		// eslint-disable-next-line vue/no-unused-components
 		// tweet,
 	},
@@ -124,12 +130,5 @@ export default {
 </script>
 
 <style>
-
-.timeline{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
 
 </style>

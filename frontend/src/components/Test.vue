@@ -33,7 +33,7 @@ export default {
 			this.$router.push("/");
 		},
 		goToTimeline: function () {
-			this.$router.push("/Timeline");
+			this.$router.push("/Home");
 		},
 	},
 };

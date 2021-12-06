@@ -17,6 +17,10 @@ export default {
   src: url(./assets/GOT.ttf);
 }
 
+.main{
+	margin-left: 0%;
+}
+
 * {
 	font-family: cascadia-code, sans-serif;
 	margin: 0;

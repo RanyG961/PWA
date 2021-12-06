@@ -1,8 +1,8 @@
 import { createWebHistory, createRouter } from 'vue-router';
 import Login from '@/views/Login.vue';
 import Profile from '@/views/Profile.vue';
-import Timeline from '@/views/Timeline.vue';
-import Profil from '@/views/Profil.vue';
+import Profiles from '@/views/Profiles.vue';
+import Home from '@/views/Home.vue';
 
 const routes = [
     {
@@ -17,15 +17,15 @@ const routes = [
         props: true,
     },
     {
-        name: 'timeline',
-        path: '/timeline',
-        component: Timeline,
+        name: 'profiles',
+        path: '/profiles/:username',
+        component: Profiles,
         props: true,
     },
     {
-        name: 'profil',
-        path: '/profil/:username',
-        component: Profil,
+        name: 'home',
+        path: '/home',
+        component: Home,
         props: true,
     },
 ];
