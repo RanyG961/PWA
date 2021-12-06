@@ -28,6 +28,6 @@ Notre projet est un projet MVC, Modèle - Vue - Controlleur ce qui permet une me
 
 ---
 
-### Sources et fragueme utilisés
+### Sources et fragments de code utilisés
 
-[Soruces](Sources.html)
+[Sources](Sources.html)
