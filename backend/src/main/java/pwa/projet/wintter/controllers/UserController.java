@@ -61,9 +61,9 @@ public class UserController
     }
 
     @PostMapping("/findUsers")
-    public ResponseEntity<HashMap<Integer, Object>> findUsers()
+    public ResponseEntity<HashMap<Integer, Object>> findUsers(@RequestHeader(AUTHORIZATION) String token) throws IOException
     {
-        return ResponseEntity.ok().body(userService.allUsers());
+        return ResponseEntity.ok().body(userService.allUsers(token));
     }
 
     @PostMapping("/followUser")
@@ -74,6 +74,17 @@ public class UserController
         return new ResponseEntity<>("User followed", HttpStatus.OK);
     }
 
+    @PostMapping("/nbFollower")
+    public ResponseEntity<Integer> countFollowers(@RequestBody FollowRequest followRequest)
+    {
+        return ResponseEntity.ok().body(userService.countFollowers(followRequest));
+    }
+
+    @PostMapping("/nbFollowing")
+    public ResponseEntity<Integer> countFollowing(@RequestBody FollowRequest followRequest)
+    {
+        return ResponseEntity.ok().body(userService.countFollowing(followRequest));
+    }
 
     @PostMapping("/unfollow")
     public ResponseEntity<String> unFollowUser(@RequestHeader(AUTHORIZATION) String token, @RequestBody FollowRequest followingUsername) throws IOException

@@ -8,6 +8,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import pwa.projet.wintter.models.Favorite;
 import pwa.projet.wintter.models.Retweet;
@@ -141,9 +142,24 @@ public class TweetService
     }
 
 
-    public void deleteTweet(Long id)
+    public boolean deleteTweet(@RequestHeader(AUTHORIZATION) String token, @RequestBody RetweetFavoriteRequest tweetRequest) throws IOException
     {
-        tweetRepo.deleteById(id);
+        User user = getUserByToken(token);
+        Tweet tweet = tweetRepo.findTweetByTweetId(tweetRequest.getTweetId()).orElseThrow();
+
+        retweetRepo.deleteRetweetByTweet(tweet);
+        favoriteRepo.deleteFavoriteByTweet(tweet);
+
+        if(tweetRepo.existsTweetByTweetIdAndUser(tweetRequest.getTweetId(), user))
+        {
+            tweetRepo.deleteById(tweetRequest.getTweetId());
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+//        tweetRepo.deleteById();
     }
 
 

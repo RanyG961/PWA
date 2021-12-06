@@ -223,6 +223,22 @@ public class UserService implements UserDetailsService
         followRepo.deleteByFollowerAndFollowing(follower, following);
     }
 
+    @Transactional
+    public int countFollowers(@RequestBody FollowRequest followRequest)
+    {
+        User user = findByUsername(followRequest.getUsername());
+
+        return followRepo.countFollowByFollowing(user);
+
+    }
+
+    @Transactional
+    public int countFollowing(@RequestBody FollowRequest followRequest)
+    {
+        User user = findByUsername(followRequest.getUsername());
+        return followRepo.countFollowByFollower(user);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException
     {
@@ -246,9 +262,10 @@ public class UserService implements UserDetailsService
                 user.getUsername(), user.getPassword(), authorities);
     }
 
-    public HashMap<Integer, Object> allUsers()
+    public HashMap<Integer, Object> allUsers(@RequestHeader(AUTHORIZATION) String token) throws IOException
     {
-        List<User> allUsers = userRepo.findAll();
+        User user = tweetService.getUserByToken(token);
+        List<User> allUsers = userRepo.findUsersByUsernameIsNotLike(user.getUsername());
         HashMap<Integer, Object> hashUsers = new HashMap<>();
         Integer hashId = 0;
 

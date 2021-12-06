@@ -33,10 +33,22 @@ public class TweetController
     @PostMapping("/addTweet")
     public ResponseEntity<String> addTweet(@RequestHeader(AUTHORIZATION) String token, @RequestBody TweetRequest tweetRequest) throws IOException
     {
-        String username = tweetService.usernameFromToken(token);
-//        System.out.println(tweetRequest.getContent() + " media : " + tweetRequest.getMedia());
         tweetService.addTweet(tweetRequest, token);
         return new ResponseEntity<>("Tweet added !", HttpStatus.OK);
+    }
+
+    @PostMapping("/deleteTweet")
+    public ResponseEntity<String> deleteTweet(@RequestHeader(AUTHORIZATION) String token, @RequestBody RetweetFavoriteRequest tweetRequest) throws IOException
+    {
+        boolean tweetFromThisUser = tweetService.deleteTweet(token, tweetRequest);
+        if(tweetFromThisUser)
+        {
+            return new ResponseEntity<>("Tweet deleted !", HttpStatus.OK);
+        }
+        else
+        {
+            return new ResponseEntity<>("Tweet not deleted !", HttpStatus.FORBIDDEN);
+        }
     }
 
     @PostMapping(value = "/allTweets", produces = APPLICATION_JSON_VALUE)
