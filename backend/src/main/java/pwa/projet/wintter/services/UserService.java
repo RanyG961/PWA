@@ -212,6 +212,15 @@ public class UserService implements UserDetailsService
         return followRepo.saveAndFlush(follow);
     }
 
+    public  HashMap<String, Object> getCurrentUserInfo(@RequestHeader(AUTHORIZATION) String token) throws IOException
+    {
+        String username = tweetService.usernameFromToken(token);
+        User currentUser = getUserByUsername(username).orElseThrow();
+        HashMap<String, Object> hashCurrentUser = hashingUser(currentUser, currentUser);
+
+        return hashCurrentUser;
+    }
+
     @Transactional
     public void unFollowSomeone(@RequestHeader(AUTHORIZATION) String token, @RequestBody FollowRequest followingRequest) throws IOException
     {
@@ -303,7 +312,7 @@ public class UserService implements UserDetailsService
         return hashUser;
     }
 
-    private HashMap<String, Object> hashingUser(User u, User follower)
+    public HashMap<String, Object> hashingUser(User u, User follower)
     {
         HashMap<String, Object> hashUser = new HashMap<>();
 

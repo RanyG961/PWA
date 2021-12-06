@@ -103,56 +103,11 @@ public class UserController
 
 
     @PostMapping(value = "/infos", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object>getUserByUsernamePost( HttpServletRequest request, HttpServletResponse response) throws IOException
+    public ResponseEntity<Object>getUserByUsernamePost(@RequestHeader(AUTHORIZATION) String token) throws IOException
     {
+        HashMap<String, Object> hashCurrentUser = userService.getCurrentUserInfo(token);
 
-        String authorizationHeader = request.getHeader(AUTHORIZATION);
-        String refreshToken;
-
-        System.out.println("Post getUser " + authorizationHeader);
-
-        if (authorizationHeader != null)
-        {
-            try
-            {
-                if( authorizationHeader.contains("Bearer"))
-                {
-                    refreshToken = authorizationHeader.substring("Bearer ".length());
-                }
-                else
-                {
-                    refreshToken = authorizationHeader;
-                }
-
-                Algorithm algo = Algorithm.HMAC256("secret".getBytes());
-                JWTVerifier verifier = JWT.require(algo).build();
-                DecodedJWT decodedJWT = verifier.verify(refreshToken);
-                System.out.println("decoded : " + decodedJWT.getSubject());
-                String username = decodedJWT.getSubject();
-                User user = userService.getUser(username);
-
-                System.out.println("Hello I found this user " + username);
-                return new ResponseEntity<>(user, HttpStatus.OK);
-            } catch (Exception e)
-            {
-                log.error("Error logging in : {}", e.getMessage());
-
-                response.setHeader("error", e.getMessage());
-                response.setStatus(FORBIDDEN.value());
-
-                Map<String, String> error = new HashMap<>();
-
-                error.put("error_message", e.getMessage());
-
-                response.setContentType(APPLICATION_JSON_VALUE);
-
-                new ObjectMapper().writeValue(response.getOutputStream(), error);
-            }
-        } else
-        {
-            throw new RuntimeException("Refresh token is missing !");
-        }
-        return ResponseEntity.notFound().build();
+        return new ResponseEntity<>(hashCurrentUser, HttpStatus.OK);
     }
 
     @GetMapping("/getRoles")
