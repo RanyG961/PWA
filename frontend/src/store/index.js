@@ -99,6 +99,8 @@ const store = createStore({
         tweet: {
             tweetId: -1,
         },
+        nbFollower: -1,
+        nbFollowing: -1,
     },
     mutations: {
         setStatus: function (state, status) {
@@ -127,6 +129,12 @@ const store = createStore({
         },
         demandeFollow: function (state, demandeFollow) {
             state.demandeFollow = demandeFollow;
+        },
+        nbFollower: function (state, nbFollower) {
+            state.nbFollower = nbFollower;
+        },
+        nbFollowing: function (state, nbFollowing) {
+            state.nbFollowing = nbFollowing;
         },
         logout: function (state) {
             state.user = {
@@ -321,6 +329,37 @@ const store = createStore({
                         reject(error);
                     });
             });
+        },
+        deleteTweet: ({ commit }, deleteOk) => {
+            return new Promise((resolve, reject) => {
+                commit('setStatus', 'loading');
+                instance
+                    .post('/tweet/deleteTweet', deleteOk)
+                    .then(function (response) {
+                        commit('setStatus', 'created');
+                        resolve(response);
+                    })
+                    .catch(function (error) {
+                        commit('setStatus', 'error_created');
+                        reject(error);
+                    });
+            });
+        },
+        getNbFollowers: ({ commit }, nbFollower) => {
+            instance
+                .post('user/nbFollower', nbFollower)
+                .then(function (response) {
+                    commit('nbFollower', response.data);
+                })
+                .catch(function () {});
+        },
+        getNbFollowing: ({ commit }, nbFollowing) => {
+            instance
+                .post('user/nbFollowing', nbFollowing)
+                .then(function (response) {
+                    commit('nbFollowing', response.data);
+                })
+                .catch(function () {});
         },
     },
 });

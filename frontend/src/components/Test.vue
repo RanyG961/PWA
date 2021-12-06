@@ -1,40 +1,72 @@
 <template>
 	<div class="card">
-		<h1 class="card_title">Profil</h1>
-		<p class="card_subtitle">Hello {{ user.username }} !</p>
-		<img :src="user.profilePicture" />
-		<div>
-			<h2>Tweets</h2>
-			<p v-for="(tweet, index) in user.tweets" :key="index">
-				{{ tweet.content }} {{ tweet.createdTime }}
-			</p>
-		</div>
+		<Profil :utilisateur="utilisateur"></Profil>
+		<Tweet
+			v-for="tweet in utilisateur.tweets"
+			:key="tweet.id"
+			:tweets="tweet"
+		/>
 		<div class="form-row">
-			<button class="button" @click="logout()">Déconnexion</button>
+			<p @click="goToHome()">Timeline</p>
 		</div>
-		<div class="form-row">
-			<p @click="goToTimeline()">Timeline</p>
-		</div>
+		<!-- <span @click="getFollowing()"> {{ nbFollowing }} Abonnements </span>
+		<span @click="getFollowers()"> {{ nbFollower }} Abonnés </span> -->
 	</div>
 </template>
-
 <script>
 import { mapState } from "vuex";
+import Profil from "@/components/Profil.vue";
+import Tweet from "@/components/Tweet.vue";
+
 export default {
-	name: "Profil",
+	name: "Profile",
+	components: {
+		Profil,
+		Tweet,
+	},
+	mounted: function () {
+		// console.log(this.$store.state.user);
+		if (this.$store.state.user.username == "") {
+			this.$router.push("/");
+			return;
+		}
+
+		this.$store.dispatch("getUserInfos");
+
+		console.log(this.$store.state.user.username);
+		this.$store.dispatch("getNbFollowers", {
+			username: this.$store.state.user.username,
+		});
+		this.$store.dispatch("getNbFollowing", {
+			username: this.$store.state.user.username,
+		});
+	},
 	computed: {
 		...mapState({
-			user: "user",
+			utilisateur: "userInfos",
+			nbFollower: "nbFollower",
+			nbFollowing: "nbFollowing",
 		}),
 	},
 	methods: {
-		logout: function () {
-			this.$store.commit("logout");
-			this.$router.push("/");
-		},
-		goToTimeline: function () {
+		goToHome: function () {
 			this.$router.push("/Home");
+		},
+		getFollowing: function () {
+			// this.$store.dispatch("getFollowing", {
+			// 	username: this.utilisateur.username,
+			// });
+			console.log("Hey");
+		},
+		getFollowers: function () {
+			// this.$store.dispatch("getFollowers", {
+			// 	username: this.utilisateur.username,
+			// });
+			console.log("Hello");
 		},
 	},
 };
 </script>
+
+<style>
+</style>

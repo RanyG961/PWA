@@ -12,4 +12,5 @@ public interface RetweetRepository extends JpaRepository<Retweet, Long>
     Optional<Retweet> findRetweetByTweetAndUser(Tweet tweet, User user);
     void deleteRetweetByTweetAndUser(Tweet tweet, User user);
     int countRetweetByTweet(Tweet tweet);
+    void deleteRetweetByTweet(Tweet tweet);
 }

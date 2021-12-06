@@ -11,5 +11,6 @@ public interface FollowRepository extends JpaRepository<Follow, Long>
 {
     Optional<Follow> findFollowByFollowerIsAndFollowingIs(User follower, User following);
     void deleteByFollowerAndFollowing(User follower, User following);
-
+    int countFollowByFollower(User user);
+    int countFollowByFollowing(User user);
 }

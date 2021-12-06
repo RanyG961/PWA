@@ -2,15 +2,16 @@
 	<Navigation />
 	<div class="card">
 		<Profil :utilisateur="utilisateur"></Profil>
+		<follow :utilisateur="utilisateur" />
 		<Tweet
 			v-for="tweet in utilisateur.tweets"
 			:key="tweet.id"
 			:tweets="tweet"
 		/>
-		<follow :utilisateur="utilisateur" />
 		<div class="form-row">
 			<button classe="timeline_link" @click="goToHome()">Timeline</button>
 		</div>
+		<Deconnexion />
 	</div>
 	<AppFooter />
 </template>
@@ -21,6 +22,7 @@ import Profil from "@/components/Profil.vue";
 import Tweet from "@/components/Tweet.vue";
 import Follow from "@/components/Follow.vue";
 import AppFooter from "@/components/AppFooter.vue";
+import Deconnexion from "@/components/Deconnexion.vue";
 
 export default {
 	name: "Profile",
@@ -30,6 +32,7 @@ export default {
 		Tweet,
 		Follow,
 		AppFooter,
+		Deconnexion,
 	},
 	mounted: function () {
 		// console.log(this.$store.state.user);
